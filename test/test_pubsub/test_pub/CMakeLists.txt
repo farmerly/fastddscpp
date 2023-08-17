@@ -10,12 +10,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     endif()
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR}/src/dds)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/test/test_pubsub/idls)
 
 aux_source_directory(. DIR_SRCS)
 add_executable(${PROJECT_NAME} ${DIR_SRCS})
 
 target_link_libraries(${PROJECT_NAME} idls)
-target_link_libraries(${PROJECT_NAME} fastdds_pkg)
+target_link_libraries(${PROJECT_NAME} fastddscpp)
 target_link_libraries(${PROJECT_NAME} glog)
