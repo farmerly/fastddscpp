@@ -10,7 +10,7 @@ CDDSTopicDataReader::~CDDSTopicDataReader()
 
 bool CDDSTopicDataReader::initDataReader(std::string                          topicName,
                                          std::string                          typeName,
-                                         DDSDomainParticipant                *participant,
+                                         CDDSDomainParticipant               *participant,
                                          eprosima::fastdds::dds::TypeSupport &typeSupport,
                                          IDataPacket *(*createCallback)(),
                                          void (*processCallback)(IDataPacket *))

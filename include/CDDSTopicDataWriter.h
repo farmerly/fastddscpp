@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DDSDomainParticipant.h"
+#include "CDDSDomainParticipant.h"
 #include <fastdds/dds/publisher/DataWriter.hpp>
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
 
@@ -13,7 +13,7 @@ public:
 public:
     bool initDataWriter(std::string                          topicName,
                         std::string                          typeName,
-                        DDSDomainParticipant                *participant,
+                        CDDSDomainParticipant               *participant,
                         eprosima::fastdds::dds::TypeSupport &typeSupport);
     bool sendData(void *data);
 

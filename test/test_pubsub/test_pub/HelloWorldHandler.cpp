@@ -18,9 +18,9 @@ HelloWorldHandler::~HelloWorldHandler()
 {
 }
 
-TopicDataTypeFactory *HelloWorldHandler::createProxyFactory()
+CTopicDataTypeFactory *HelloWorldHandler::createProxyFactory()
 {
-    return new TopicDataTypeFactory(this);
+    return new CTopicDataTypeFactory(this);
 }
 
 eprosima::fastdds::dds::TopicDataType *HelloWorldHandler::createTopicDataType(std::string typeName)
@@ -47,7 +47,7 @@ DataPacketCreateCB HelloWorldHandler::getDataPacketCB(std::string typeName)
     return nullptr;
 }
 
-DataProcessCB HelloWorldHandler::getDataProcessCB(std::string typeName)
+DataPacketProcessCB HelloWorldHandler::getDataProcessCB(std::string typeName)
 {
     if (!typeName.compare(DDS_TYPE_HELLO_WORLD_ONE)) {
         return processCBHelloWorldOne;
@@ -114,7 +114,7 @@ bool HelloWorldHandler::registerPublisher(std::string topicName)
 {
     std::string typeName = getTypeNameByTopic(topicName);
     if (typeName.size() > 0) {
-        return m_manager.registerPublisher(topicName, typeName);
+        return m_manager.registerDataWriter(topicName, typeName);
     }
     return false;
 }
@@ -123,7 +123,7 @@ bool HelloWorldHandler::registerSubscriber(std::string topicName)
 {
     std::string typeName = getTypeNameByTopic(topicName);
     if (typeName.size() > 0) {
-        return m_manager.registerSubscriber(topicName, typeName);
+        return m_manager.registerDataReader(topicName, typeName);
     }
     return false;
 }

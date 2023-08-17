@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DDSDomainParticipant.h"
+#include "CDDSDomainParticipant.h"
 #include "IDataPacket.h"
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
@@ -14,7 +14,7 @@ public:
 public:
     bool initDataReader(std::string                          topicName,
                         std::string                          typeName,
-                        DDSDomainParticipant                *participant,
+                        CDDSDomainParticipant               *participant,
                         eprosima::fastdds::dds::TypeSupport &typeSupport,
                         IDataPacket *(*createCallback)(),
                         void (*processCallback)(IDataPacket *));

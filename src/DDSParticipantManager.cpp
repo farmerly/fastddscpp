@@ -20,7 +20,7 @@ DDSParticipantManager::~DDSParticipantManager()
 
 void DDSParticipantManager::initDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos)
 {
-    m_domainParticipant = new DDSDomainParticipant(domainId, participantQos);
+    m_domainParticipant = new CDDSDomainParticipant(domainId, participantQos);
 }
 
 void DDSParticipantManager::registerProxyWorker(ITopicDataTypeWorker *worker)
@@ -28,7 +28,7 @@ void DDSParticipantManager::registerProxyWorker(ITopicDataTypeWorker *worker)
     m_proxyFactory = worker->createProxyFactory();
 }
 
-bool DDSParticipantManager::registerPublisher(std::string topicName, std::string typeName)
+bool DDSParticipantManager::registerDataWriter(std::string topicName, std::string typeName)
 {
     TypeSupport          typeSupport(m_proxyFactory->createTopicDataType(typeName));
     CDDSTopicDataWriter *topicWriter = new CDDSTopicDataWriter();
@@ -40,11 +40,11 @@ bool DDSParticipantManager::registerPublisher(std::string topicName, std::string
     return true;
 }
 
-bool DDSParticipantManager::registerSubscriber(std::string topicName, std::string typeName)
+bool DDSParticipantManager::registerDataReader(std::string topicName, std::string typeName)
 {
     TypeSupport          typeSupport(m_proxyFactory->createTopicDataType(typeName));
     DataPacketCreateCB   createCallback = m_proxyFactory->getDataPacketCB(typeName);
-    DataProcessCB        processCallback = m_proxyFactory->getDataProcessCB(typeName);
+    DataPacketProcessCB  processCallback = m_proxyFactory->getDataProcessCB(typeName);
     CDDSTopicDataReader *topicReader = new CDDSTopicDataReader();
     topicReader->initDataReader(topicName, typeName, m_domainParticipant, typeSupport, createCallback, processCallback);
     if (m_mapReader.find(topicName) == m_mapReader.end()) {

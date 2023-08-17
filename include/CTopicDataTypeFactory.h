@@ -3,16 +3,16 @@
 
 #include "ITopicDataTypeCreator.h"
 
-class TopicDataTypeFactory
+class CTopicDataTypeFactory
 {
 public:
-    TopicDataTypeFactory(ITopicDataTypeCreator *creator);
-    ~TopicDataTypeFactory();
+    CTopicDataTypeFactory(ITopicDataTypeCreator *creator);
+    ~CTopicDataTypeFactory();
 
 public:
     eprosima::fastdds::dds::TopicDataType *createTopicDataType(std::string typeName);
     DataPacketCreateCB                     getDataPacketCB(std::string typeName);
-    DataProcessCB                          getDataProcessCB(std::string typeName);
+    DataPacketProcessCB                    getDataProcessCB(std::string typeName);
 
 private:
     ITopicDataTypeCreator *m_creator;

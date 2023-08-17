@@ -10,10 +10,10 @@ public:
     virtual ~HelloWorldHandler();
 
 protected:
-    TopicDataTypeFactory                  *createProxyFactory() override;
+    CTopicDataTypeFactory                 *createProxyFactory() override;
     eprosima::fastdds::dds::TopicDataType *createTopicDataType(std::string typeName) override;
     DataPacketCreateCB                     getDataPacketCB(std::string typeName) override;
-    DataProcessCB                          getDataProcessCB(std::string typeName) override;
+    DataPacketProcessCB                    getDataProcessCB(std::string typeName) override;
 
 private:
     std::string         getTypeNameByTopic(std::string topicName);

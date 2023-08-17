@@ -10,7 +10,7 @@ CDDSTopicDataWriter::~CDDSTopicDataWriter()
 
 bool CDDSTopicDataWriter::initDataWriter(std::string                          topicName,
                                          std::string                          typeName,
-                                         DDSDomainParticipant                *participant,
+                                         CDDSDomainParticipant               *participant,
                                          eprosima::fastdds::dds::TypeSupport &typeSupport)
 {
     m_topic = participant->registerTopic(topicName, typeName, eprosima::fastdds::dds::TOPIC_QOS_DEFAULT, typeSupport);
