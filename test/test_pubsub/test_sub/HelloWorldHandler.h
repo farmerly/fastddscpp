@@ -1,16 +1,15 @@
-#include "DDSParticipantManager.h"
+#include "CDDSParticipantManager.h"
 #include "HelloWorldConstants.h"
 #include "HelloWorldOne.h"
 #include "HelloWorldTwo.h"
 
-class HelloWorldHandler : public ITopicDataTypeCreator, public ITopicDataTypeWorker
+class HelloWorldHandler : public ITopicDataTypeCreator
 {
 public:
     HelloWorldHandler();
     virtual ~HelloWorldHandler();
 
 protected:
-    CTopicDataTypeFactory                 *createProxyFactory() override;
     eprosima::fastdds::dds::TopicDataType *createTopicDataType(std::string typeName) override;
     DataPacketCreateCB                     getDataPacketCB(std::string typeName) override;
     DataPacketProcessCB                    getDataProcessCB(std::string typeName) override;
@@ -29,5 +28,5 @@ public:
     bool registerSubscriber(std::string topicName);
 
 private:
-    DDSParticipantManager m_manager;
+    CDDSParticipantManager m_manager;
 };

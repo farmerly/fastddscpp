@@ -4,19 +4,19 @@
 #include "CDDSDomainParticipant.h"
 #include "CDDSTopicDataReader.h"
 #include "CDDSTopicDataWriter.h"
-#include "ITopicDataTypeWorker.h"
+#include "CTopicDataTypeFactory.h"
 #include <map>
 #include <string>
 
-class DDSParticipantManager
+class CDDSParticipantManager
 {
 public:
-    DDSParticipantManager();
-    ~DDSParticipantManager();
+    CDDSParticipantManager();
+    ~CDDSParticipantManager();
 
 public:
     void initDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos);
-    void registerProxyWorker(ITopicDataTypeWorker *worker);
+    void registerProxyFactory(ITopicDataTypeCreator *creator);
     bool registerDataWriter(std::string topicName, std::string typeName);
     bool registerDataReader(std::string topicName, std::string typeName);
 

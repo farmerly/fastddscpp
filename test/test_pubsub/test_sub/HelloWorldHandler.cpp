@@ -18,11 +18,6 @@ HelloWorldHandler::~HelloWorldHandler()
 {
 }
 
-CTopicDataTypeFactory *HelloWorldHandler::createProxyFactory()
-{
-    return new CTopicDataTypeFactory(this);
-}
-
 eprosima::fastdds::dds::TopicDataType *HelloWorldHandler::createTopicDataType(std::string typeName)
 {
     if (!typeName.compare(DDS_TYPE_HELLO_WORLD_ONE)) {
@@ -106,7 +101,7 @@ bool HelloWorldHandler::init(uint32_t domain_id)
     DomainParticipantQos participantQos = manager.getDomainParticipantQos();
 
     m_manager.initDomainParticipant(domain_id, participantQos);
-    m_manager.registerProxyWorker(this);
+    m_manager.registerProxyFactory(this);
     return true;
 }
 

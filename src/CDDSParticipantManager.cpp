@@ -1,16 +1,16 @@
-#include "DDSParticipantManager.h"
+#include "CDDSParticipantManager.h"
 #include "CDDSTopicDataReader.h"
 #include <fastdds/dds/topic/TypeSupport.hpp>
 
 using namespace eprosima::fastdds::dds;
 using namespace std;
 
-DDSParticipantManager::DDSParticipantManager()
+CDDSParticipantManager::CDDSParticipantManager()
 {
     m_proxyFactory = nullptr;
 }
 
-DDSParticipantManager::~DDSParticipantManager()
+CDDSParticipantManager::~CDDSParticipantManager()
 {
     if (m_proxyFactory) {
         delete m_proxyFactory;
@@ -18,17 +18,17 @@ DDSParticipantManager::~DDSParticipantManager()
     }
 }
 
-void DDSParticipantManager::initDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos)
+void CDDSParticipantManager::initDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos)
 {
     m_domainParticipant = new CDDSDomainParticipant(domainId, participantQos);
 }
 
-void DDSParticipantManager::registerProxyWorker(ITopicDataTypeWorker *worker)
+void CDDSParticipantManager::registerProxyFactory(ITopicDataTypeCreator *creator)
 {
-    m_proxyFactory = worker->createProxyFactory();
+    m_proxyFactory = new CTopicDataTypeFactory(creator);
 }
 
-bool DDSParticipantManager::registerDataWriter(std::string topicName, std::string typeName)
+bool CDDSParticipantManager::registerDataWriter(std::string topicName, std::string typeName)
 {
     TypeSupport          typeSupport(m_proxyFactory->createTopicDataType(typeName));
     CDDSTopicDataWriter *topicWriter = new CDDSTopicDataWriter();
@@ -40,7 +40,7 @@ bool DDSParticipantManager::registerDataWriter(std::string topicName, std::strin
     return true;
 }
 
-bool DDSParticipantManager::registerDataReader(std::string topicName, std::string typeName)
+bool CDDSParticipantManager::registerDataReader(std::string topicName, std::string typeName)
 {
     TypeSupport          typeSupport(m_proxyFactory->createTopicDataType(typeName));
     DataPacketCreateCB   createCallback = m_proxyFactory->getDataPacketCB(typeName);
@@ -54,7 +54,7 @@ bool DDSParticipantManager::registerDataReader(std::string topicName, std::strin
     return true;
 }
 
-bool DDSParticipantManager::sendData(std::string topicName, std::string typeName, void *data)
+bool CDDSParticipantManager::sendData(std::string topicName, std::string typeName, void *data)
 {
     if (m_mapWriter.find(topicName) != m_mapWriter.end()) {
         map<string, CDDSTopicDataWriter *> &mapWriter = m_mapWriter[topicName];
