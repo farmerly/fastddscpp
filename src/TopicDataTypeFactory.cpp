@@ -2,7 +2,7 @@
 
 using namespace eprosima::fastdds::dds;
 
-TopicDataTypeFactory::TopicDataTypeFactory(TopicDataTypeCreator *creator)
+TopicDataTypeFactory::TopicDataTypeFactory(ITopicDataTypeCreator *creator)
 {
     m_creator = creator;
 }

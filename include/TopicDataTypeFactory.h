@@ -1,12 +1,12 @@
 #ifndef TOPIC_DATA_TYPE_FACTORY_H_H_H
 #define TOPIC_DATA_TYPE_FACTORY_H_H_H
 
-#include "TopicDataTypeCreator.h"
+#include "ITopicDataTypeCreator.h"
 
 class TopicDataTypeFactory
 {
 public:
-    TopicDataTypeFactory(TopicDataTypeCreator *creator);
+    TopicDataTypeFactory(ITopicDataTypeCreator *creator);
     ~TopicDataTypeFactory();
 
 public:
@@ -15,7 +15,7 @@ public:
     DataProcessCB                          getDataProcessCB(std::string typeName);
 
 private:
-    TopicDataTypeCreator *m_creator;
+    ITopicDataTypeCreator *m_creator;
 };
 
 #endif

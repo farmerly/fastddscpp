@@ -5,11 +5,11 @@
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 
-class DDSTopicDataReader
+class CDDSTopicDataReader
 {
 public:
-    DDSTopicDataReader();
-    ~DDSTopicDataReader();
+    CDDSTopicDataReader();
+    ~CDDSTopicDataReader();
 
 public:
     bool initDataReader(std::string                          topicName,

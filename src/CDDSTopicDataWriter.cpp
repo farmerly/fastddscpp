@@ -1,15 +1,17 @@
-#include "DDSTopicDataWriter.h"
+#include "CDDSTopicDataWriter.h"
 
-DDSTopicDataWriter::DDSTopicDataWriter()
+CDDSTopicDataWriter::CDDSTopicDataWriter()
 {
 }
 
-DDSTopicDataWriter::~DDSTopicDataWriter()
+CDDSTopicDataWriter::~CDDSTopicDataWriter()
 {
 }
 
-bool DDSTopicDataWriter::initDataWriter(std::string topicName, std::string typeName, DDSDomainParticipant *participant,
-                                        eprosima::fastdds::dds::TypeSupport &typeSupport)
+bool CDDSTopicDataWriter::initDataWriter(std::string                          topicName,
+                                         std::string                          typeName,
+                                         DDSDomainParticipant                *participant,
+                                         eprosima::fastdds::dds::TypeSupport &typeSupport)
 {
     m_topic = participant->registerTopic(topicName, typeName, eprosima::fastdds::dds::TOPIC_QOS_DEFAULT, typeSupport);
     if (m_topic == nullptr) {
@@ -24,13 +26,13 @@ bool DDSTopicDataWriter::initDataWriter(std::string topicName, std::string typeN
     return true;
 }
 
-bool DDSTopicDataWriter::sendData(void *data)
+bool CDDSTopicDataWriter::sendData(void *data)
 {
     return m_dataWriter->write(data);
 }
 
-void DDSTopicDataWriter::DDSDataWriterListener::on_publication_matched(eprosima::fastdds::dds::DataWriter *writer,
-                                                                       const eprosima::fastdds::dds::PublicationMatchedStatus &info)
+void CDDSTopicDataWriter::DDSDataWriterListener::on_publication_matched(eprosima::fastdds::dds::DataWriter                     *writer,
+                                                                        const eprosima::fastdds::dds::PublicationMatchedStatus &info)
 {
     if (info.current_count_change == 1) {
         std::cout << "Publisher matched" << std::endl;

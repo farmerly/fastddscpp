@@ -1,9 +1,9 @@
 #include "HelloWorldHandler.h"
 #include "CDataPacket.h"
+#include "CParticipantQosHandler.h"
 #include "HelloWorldConstants.h"
 #include "HelloWorldOnePubSubTypes.h"
 #include "HelloWorldTwoPubSubTypes.h"
-#include "ParticipantQosManager.h"
 #include <glog/logging.h>
 
 using namespace eprosima::fastdds::dds;
@@ -99,7 +99,7 @@ void HelloWorldHandler::processCBHelloWorldTwo(IDataPacket *data)
 
 bool HelloWorldHandler::init(uint32_t domain_id)
 {
-    ParticipantQosManager    manager("Participant_pubscriber");
+    CParticipantQosHandler   manager("Participant_pubscriber");
     std::vector<std::string> peer_locators = {"127.0.0.1:5100"};
     // manager.addTCPV4Transport(5101, peer_locators);
     manager.addUDPV4Transport();

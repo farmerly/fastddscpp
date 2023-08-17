@@ -9,7 +9,7 @@
 typedef IDataPacket *(*DataPacketCreateCB)();
 typedef void (*DataProcessCB)(IDataPacket *);
 
-class TopicDataTypeCreator
+class ITopicDataTypeCreator
 {
 public:
     virtual eprosima::fastdds::dds::TopicDataType *createTopicDataType(std::string typeName) = 0;

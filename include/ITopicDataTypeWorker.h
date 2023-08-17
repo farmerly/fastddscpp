@@ -3,7 +3,7 @@
 
 #include "TopicDataTypeFactory.h"
 
-class TopicDataTypeWorker
+class ITopicDataTypeWorker
 {
 public:
     virtual TopicDataTypeFactory *createProxyFactory() = 0;

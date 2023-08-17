@@ -4,11 +4,11 @@
 #include <fastdds/dds/publisher/DataWriter.hpp>
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
 
-class DDSTopicDataWriter
+class CDDSTopicDataWriter
 {
 public:
-    DDSTopicDataWriter();
-    ~DDSTopicDataWriter();
+    CDDSTopicDataWriter();
+    ~CDDSTopicDataWriter();
 
 public:
     bool initDataWriter(std::string                          topicName,

@@ -3,7 +3,7 @@
 #include "HelloWorldOne.h"
 #include "HelloWorldTwo.h"
 
-class HelloWorldHandler : public TopicDataTypeCreator, public TopicDataTypeWorker
+class HelloWorldHandler : public ITopicDataTypeCreator, public ITopicDataTypeWorker
 {
 public:
     HelloWorldHandler();
