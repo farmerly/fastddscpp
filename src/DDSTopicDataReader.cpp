@@ -12,8 +12,8 @@ bool DDSTopicDataReader::initDataReader(std::string                          top
                                         std::string                          typeName,
                                         DDSDomainParticipant                *participant,
                                         eprosima::fastdds::dds::TypeSupport &typeSupport,
-                                        DataPacket *(*createCallback)(),
-                                        void (*processCallback)(DataPacket *))
+                                        IDataPacket *(*createCallback)(),
+                                        void (*processCallback)(IDataPacket *))
 {
     // 需要先注册回调函数, 之后再创建 dataReader, 以防监听启动后回调方法为null
     if (!createCallback || !processCallback) {
@@ -47,7 +47,7 @@ void DDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosima
 
 void DDSTopicDataReader::DDSDataReaderListener::on_data_available(eprosima::fastdds::dds::DataReader *reader)
 {
-    DataPacket                        *m_data = createCallback();
+    IDataPacket                       *m_data = createCallback();
     eprosima::fastdds::dds::SampleInfo info;
     ReturnCode_t                       retCode = reader->take_next_sample(m_data->getData(), &info);
     if (retCode == ReturnCode_t::RETCODE_OK) {

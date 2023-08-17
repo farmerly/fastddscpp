@@ -1,23 +1,23 @@
 #pragma once
 
-#include "DataPacket.h"
+#include "IDataPacket.h"
 #include <memory>
 
 template <typename T>
-class DataPacketImpl : public DataPacket
+class CDataPacket : public IDataPacket
 {
 public:
-    DataPacketImpl()
+    CDataPacket()
     {
         m_data = new T();
     }
 
-    DataPacketImpl(T *data)
+    CDataPacket(T *data)
     {
         m_data = data;
     }
 
-    ~DataPacketImpl()
+    ~CDataPacket()
     {
         if (m_data) {
             delete m_data;

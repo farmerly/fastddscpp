@@ -16,11 +16,11 @@ protected:
     DataProcessCB                          getDataProcessCB(std::string typeName) override;
 
 private:
-    std::string        getTypeNameByTopic(std::string topicName);
-    static DataPacket *createCBHelloWorldOne();
-    static DataPacket *createCBHelloWorldTwo();
-    static void        processCBHelloWorldOne(DataPacket *data);
-    static void        processCBHelloWorldTwo(DataPacket *data);
+    std::string         getTypeNameByTopic(std::string topicName);
+    static IDataPacket *createCBHelloWorldOne();
+    static IDataPacket *createCBHelloWorldTwo();
+    static void         processCBHelloWorldOne(IDataPacket *data);
+    static void         processCBHelloWorldTwo(IDataPacket *data);
 
 public:
     bool init(uint32_t domain_id);

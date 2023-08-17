@@ -10,7 +10,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     endif()
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/test/test_pubsub/idls)
 
 aux_source_directory(. DIR_SRCS)

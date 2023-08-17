@@ -1,5 +1,5 @@
 #include "HelloWorldHandler.h"
-#include "DataPacketImpl.h"
+#include "CDataPacket.h"
 #include "HelloWorldConstants.h"
 #include "HelloWorldOnePubSubTypes.h"
 #include "HelloWorldTwoPubSubTypes.h"
@@ -71,17 +71,17 @@ std::string HelloWorldHandler::getTypeNameByTopic(std::string topicName)
     return "";
 }
 
-DataPacket *HelloWorldHandler::createCBHelloWorldOne()
+IDataPacket *HelloWorldHandler::createCBHelloWorldOne()
 {
-    return new DataPacketImpl<HelloWorldOne>();
+    return new CDataPacket<HelloWorldOne>();
 }
 
-DataPacket *HelloWorldHandler::createCBHelloWorldTwo()
+IDataPacket *HelloWorldHandler::createCBHelloWorldTwo()
 {
-    return new DataPacketImpl<HelloWorldTwo>();
+    return new CDataPacket<HelloWorldTwo>();
 }
 
-void HelloWorldHandler::processCBHelloWorldOne(DataPacket *data)
+void HelloWorldHandler::processCBHelloWorldOne(IDataPacket *data)
 {
     HelloWorldOne *hello = (HelloWorldOne *)data->getData();
     LOG(INFO) << "HelloWorldOne: " << hello->id();
@@ -89,7 +89,7 @@ void HelloWorldHandler::processCBHelloWorldOne(DataPacket *data)
     delete data;
 }
 
-void HelloWorldHandler::processCBHelloWorldTwo(DataPacket *data)
+void HelloWorldHandler::processCBHelloWorldTwo(IDataPacket *data)
 {
     HelloWorldTwo *hello = (HelloWorldTwo *)data->getData();
     LOG(INFO) << "HelloWorldTwo: " << hello->id();
