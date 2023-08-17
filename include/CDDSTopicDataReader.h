@@ -1,23 +1,23 @@
 #pragma once
 
-#include "DDSDomainParticipant.h"
-#include "DataPacket.h"
+#include "CDDSDomainParticipant.h"
+#include "IDataPacket.h"
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 
-class DDSTopicDataReader
+class CDDSTopicDataReader
 {
 public:
-    DDSTopicDataReader();
-    ~DDSTopicDataReader();
+    CDDSTopicDataReader();
+    ~CDDSTopicDataReader();
 
 public:
     bool initDataReader(std::string                          topicName,
                         std::string                          typeName,
-                        DDSDomainParticipant                *participant,
+                        CDDSDomainParticipant               *participant,
                         eprosima::fastdds::dds::TypeSupport &typeSupport,
-                        DataPacket *(*createCallback)(),
-                        void (*processCallback)(DataPacket *));
+                        IDataPacket *(*createCallback)(),
+                        void (*processCallback)(IDataPacket *));
 
 private:
     class DDSDataReaderListener : public eprosima::fastdds::dds::DataReaderListener
@@ -29,8 +29,8 @@ private:
         void on_liveliness_changed(eprosima::fastdds::dds::DataReader *reader, const eprosima::fastrtps::LivelinessChangedStatus &status);
 
     public:
-        DataPacket *(*createCallback)();
-        void (*processCallback)(DataPacket *);
+        IDataPacket *(*createCallback)();
+        void (*processCallback)(IDataPacket *);
     } m_readerListener;
     eprosima::fastdds::dds::DataReader *m_dataReader;
     eprosima::fastdds::dds::Topic      *m_topic;

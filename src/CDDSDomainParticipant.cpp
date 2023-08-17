@@ -1,4 +1,4 @@
-#include "DDSDomainParticipant.h"
+#include "CDDSDomainParticipant.h"
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/publisher/Publisher.hpp>
 #include <fastdds/dds/publisher/qos/PublisherQos.hpp>
@@ -7,7 +7,7 @@
 
 using namespace eprosima::fastdds::dds;
 
-DDSDomainParticipant::DDSDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos)
+CDDSDomainParticipant::CDDSDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos)
 {
     m_participant = DomainParticipantFactory::get_instance()->create_participant(domainId, participantQos);
     if (m_participant) {
@@ -16,28 +16,28 @@ DDSDomainParticipant::DDSDomainParticipant(int domainId, const eprosima::fastdds
     }
 }
 
-DDSDomainParticipant::~DDSDomainParticipant()
+CDDSDomainParticipant::~CDDSDomainParticipant()
 {
     if (m_participant) {
         DomainParticipantFactory::get_instance()->delete_participant(m_participant);
     }
 }
 
-eprosima::fastdds::dds::DataWriter *DDSDomainParticipant::createDataWriter(eprosima::fastdds::dds::Topic *topic,
-                                                                           eprosima::fastdds::dds::DataWriterQos dataWriterQos,
-                                                                           eprosima::fastdds::dds::DataWriterListener &listener)
+eprosima::fastdds::dds::DataWriter *CDDSDomainParticipant::createDataWriter(eprosima::fastdds::dds::Topic              *topic,
+                                                                            eprosima::fastdds::dds::DataWriterQos       dataWriterQos,
+                                                                            eprosima::fastdds::dds::DataWriterListener &listener)
 {
     return m_publisher->create_datawriter(topic, DATAWRITER_QOS_DEFAULT, &listener);
 }
 
-eprosima::fastdds::dds::DataReader *DDSDomainParticipant::createDataReader(eprosima::fastdds::dds::Topic *topic,
-                                                                           eprosima::fastdds::dds::DataReaderQos dataReaderQos,
-                                                                           eprosima::fastdds::dds::DataReaderListener &listener)
+eprosima::fastdds::dds::DataReader *CDDSDomainParticipant::createDataReader(eprosima::fastdds::dds::Topic              *topic,
+                                                                            eprosima::fastdds::dds::DataReaderQos       dataReaderQos,
+                                                                            eprosima::fastdds::dds::DataReaderListener &listener)
 {
     return m_subscriber->create_datareader(topic, DATAREADER_QOS_DEFAULT, &listener);
 }
 
-Topic *DDSDomainParticipant::registerTopic(std::string topicName, std::string typeName, const TopicQos &topicQos, TypeSupport &typeSupport)
+Topic *CDDSDomainParticipant::registerTopic(std::string topicName, std::string typeName, const TopicQos &topicQos, TypeSupport &typeSupport)
 {
     ReturnCode_t errCode = typeSupport.register_type(m_participant);
     if (errCode != ReturnCode_t::RETCODE_OK) {
@@ -46,7 +46,7 @@ Topic *DDSDomainParticipant::registerTopic(std::string topicName, std::string ty
     return m_participant->create_topic(topicName, typeName, topicQos);
 }
 
-bool DDSDomainParticipant::unregisterTopic(std::string type_name)
+bool CDDSDomainParticipant::unregisterTopic(std::string type_name)
 {
     ReturnCode_t errCode = m_participant->unregister_type(type_name);
     if (errCode != ReturnCode_t::RETCODE_OK) {

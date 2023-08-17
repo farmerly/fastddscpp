@@ -1,4 +1,4 @@
-#include "ParticipantQosManager.h"
+#include "CParticipantQosHandler.h"
 
 #include <fastdds/rtps/transport/TCPv4TransportDescriptor.h>
 #include <fastdds/rtps/transport/TCPv6TransportDescriptor.h>
@@ -10,7 +10,7 @@ using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastdds::rtps;
 using namespace eprosima::fastrtps::rtps;
 
-ParticipantQosManager::ParticipantQosManager(std::string participant_name)
+CParticipantQosHandler::CParticipantQosHandler(std::string participant_name)
 {
     m_participantQos.wire_protocol().builtin.discovery_config.discoveryProtocol = DiscoveryProtocol_t::SIMPLE;
     m_participantQos.wire_protocol().builtin.discovery_config.use_SIMPLE_EndpointDiscoveryProtocol = true;
@@ -26,23 +26,23 @@ ParticipantQosManager::ParticipantQosManager(std::string participant_name)
     m_participantQos.transport().use_builtin_transports = false;
 }
 
-ParticipantQosManager::~ParticipantQosManager()
+CParticipantQosHandler::~CParticipantQosHandler()
 {
 }
 
-DomainParticipantQos &ParticipantQosManager::getDomainParticipantQos()
+DomainParticipantQos &CParticipantQosHandler::getDomainParticipantQos()
 {
     return m_participantQos;
 }
 
-void ParticipantQosManager::addSHMTransport(uint32_t segment_size)
+void CParticipantQosHandler::addSHMTransport(uint32_t segment_size)
 {
     auto shm_transport = std::make_shared<SharedMemTransportDescriptor>();
     shm_transport->segment_size(segment_size);
     m_participantQos.transport().user_transports.push_back(shm_transport);
 }
 
-void ParticipantQosManager::addTCPV4Transport(uint16_t listen_port, const std::vector<std::string> &peer_locators)
+void CParticipantQosHandler::addTCPV4Transport(uint16_t listen_port, const std::vector<std::string> &peer_locators)
 {
     auto tcp_transport = std::make_shared<TCPv4TransportDescriptor>();
     if (listen_port != 0) {
@@ -64,11 +64,11 @@ void ParticipantQosManager::addTCPV4Transport(uint16_t listen_port, const std::v
     m_participantQos.transport().user_transports.push_back(tcp_transport);
 }
 
-void ParticipantQosManager::addTCPV6Transport()
+void CParticipantQosHandler::addTCPV6Transport()
 {
 }
 
-void ParticipantQosManager::addUDPV4Transport(const std::vector<std::string> &ipaddrs)
+void CParticipantQosHandler::addUDPV4Transport(const std::vector<std::string> &ipaddrs)
 {
     auto udp_transport = std::make_shared<UDPv4TransportDescriptor>();
     // 是否使用对 send_to() 的非阻塞调用
@@ -81,6 +81,6 @@ void ParticipantQosManager::addUDPV4Transport(const std::vector<std::string> &ip
     m_participantQos.transport().user_transports.push_back(udp_transport);
 }
 
-void ParticipantQosManager::addUDPV6Transport()
+void CParticipantQosHandler::addUDPV6Transport()
 {
 }

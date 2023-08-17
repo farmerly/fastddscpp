@@ -23,6 +23,6 @@ endif()
 find_package(fastcdr REQUIRED)
 find_package(fastrtps REQUIRED)
 
-add_subdirectory(example)
+# add_subdirectory(example)
 add_subdirectory(src)
 add_subdirectory(test)

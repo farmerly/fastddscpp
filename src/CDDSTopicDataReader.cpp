@@ -1,19 +1,19 @@
-#include "DDSTopicDataReader.h"
+#include "CDDSTopicDataReader.h"
 
-DDSTopicDataReader::DDSTopicDataReader()
+CDDSTopicDataReader::CDDSTopicDataReader()
 {
 }
 
-DDSTopicDataReader::~DDSTopicDataReader()
+CDDSTopicDataReader::~CDDSTopicDataReader()
 {
 }
 
-bool DDSTopicDataReader::initDataReader(std::string                          topicName,
-                                        std::string                          typeName,
-                                        DDSDomainParticipant                *participant,
-                                        eprosima::fastdds::dds::TypeSupport &typeSupport,
-                                        DataPacket *(*createCallback)(),
-                                        void (*processCallback)(DataPacket *))
+bool CDDSTopicDataReader::initDataReader(std::string                          topicName,
+                                         std::string                          typeName,
+                                         CDDSDomainParticipant               *participant,
+                                         eprosima::fastdds::dds::TypeSupport &typeSupport,
+                                         IDataPacket *(*createCallback)(),
+                                         void (*processCallback)(IDataPacket *))
 {
     // 需要先注册回调函数, 之后再创建 dataReader, 以防监听启动后回调方法为null
     if (!createCallback || !processCallback) {
@@ -33,8 +33,8 @@ bool DDSTopicDataReader::initDataReader(std::string                          top
     return true;
 }
 
-void DDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosima::fastdds::dds::DataReader                      *reader,
-                                                                        const eprosima::fastdds::dds::SubscriptionMatchedStatus &info)
+void CDDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosima::fastdds::dds::DataReader                      *reader,
+                                                                         const eprosima::fastdds::dds::SubscriptionMatchedStatus &info)
 {
     if (info.current_count_change == 1) {
         std::cout << "Subscriber matched" << std::endl;
@@ -45,10 +45,10 @@ void DDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosima
     }
 }
 
-void DDSTopicDataReader::DDSDataReaderListener::on_data_available(eprosima::fastdds::dds::DataReader *reader)
+void CDDSTopicDataReader::DDSDataReaderListener::on_data_available(eprosima::fastdds::dds::DataReader *reader)
 {
-    DataPacket                        *m_data = createCallback();
     eprosima::fastdds::dds::SampleInfo info;
+    IDataPacket                       *m_data = createCallback();
     ReturnCode_t                       retCode = reader->take_next_sample(m_data->getData(), &info);
     if (retCode == ReturnCode_t::RETCODE_OK) {
         if (info.valid_data) {
@@ -61,8 +61,8 @@ void DDSTopicDataReader::DDSDataReaderListener::on_data_available(eprosima::fast
     }
 }
 
-void DDSTopicDataReader::DDSDataReaderListener::on_liveliness_changed(eprosima::fastdds::dds::DataReader                *reader,
-                                                                      const eprosima::fastrtps::LivelinessChangedStatus &status)
+void CDDSTopicDataReader::DDSDataReaderListener::on_liveliness_changed(eprosima::fastdds::dds::DataReader                *reader,
+                                                                       const eprosima::fastrtps::LivelinessChangedStatus &status)
 {
     std::cout << "on_liveliness_changed: " << status.alive_count << std::endl;
 }

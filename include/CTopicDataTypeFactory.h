@@ -1,21 +1,21 @@
 #ifndef TOPIC_DATA_TYPE_FACTORY_H_H_H
 #define TOPIC_DATA_TYPE_FACTORY_H_H_H
 
-#include "TopicDataTypeCreator.h"
+#include "ITopicDataTypeCreator.h"
 
-class TopicDataTypeFactory
+class CTopicDataTypeFactory
 {
 public:
-    TopicDataTypeFactory(TopicDataTypeCreator *creator);
-    ~TopicDataTypeFactory();
+    CTopicDataTypeFactory(ITopicDataTypeCreator *creator);
+    ~CTopicDataTypeFactory();
 
 public:
     eprosima::fastdds::dds::TopicDataType *createTopicDataType(std::string typeName);
     DataPacketCreateCB                     getDataPacketCB(std::string typeName);
-    DataProcessCB                          getDataProcessCB(std::string typeName);
+    DataPacketProcessCB                    getDataProcessCB(std::string typeName);
 
 private:
-    TopicDataTypeCreator *m_creator;
+    ITopicDataTypeCreator *m_creator;
 };
 
 #endif

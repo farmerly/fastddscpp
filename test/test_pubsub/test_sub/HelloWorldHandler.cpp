@@ -1,9 +1,9 @@
 #include "HelloWorldHandler.h"
-#include "DataPacketImpl.h"
+#include "CDataPacket.h"
+#include "CParticipantQosHandler.h"
 #include "HelloWorldConstants.h"
 #include "HelloWorldOnePubSubTypes.h"
 #include "HelloWorldTwoPubSubTypes.h"
-#include "ParticipantQosManager.h"
 #include <glog/logging.h>
 
 using namespace eprosima::fastdds::dds;
@@ -16,11 +16,6 @@ HelloWorldHandler::HelloWorldHandler()
 
 HelloWorldHandler::~HelloWorldHandler()
 {
-}
-
-TopicDataTypeFactory *HelloWorldHandler::createProxyFactory()
-{
-    return new TopicDataTypeFactory(this);
 }
 
 eprosima::fastdds::dds::TopicDataType *HelloWorldHandler::createTopicDataType(std::string typeName)
@@ -47,7 +42,7 @@ DataPacketCreateCB HelloWorldHandler::getDataPacketCB(std::string typeName)
     return nullptr;
 }
 
-DataProcessCB HelloWorldHandler::getDataProcessCB(std::string typeName)
+DataPacketProcessCB HelloWorldHandler::getDataProcessCB(std::string typeName)
 {
     if (!typeName.compare(DDS_TYPE_HELLO_WORLD_ONE)) {
         return processCBHelloWorldOne;
@@ -71,17 +66,17 @@ std::string HelloWorldHandler::getTypeNameByTopic(std::string topicName)
     return "";
 }
 
-DataPacket *HelloWorldHandler::createCBHelloWorldOne()
+IDataPacket *HelloWorldHandler::createCBHelloWorldOne()
 {
-    return new DataPacketImpl<HelloWorldOne>();
+    return new CDataPacket<HelloWorldOne>();
 }
 
-DataPacket *HelloWorldHandler::createCBHelloWorldTwo()
+IDataPacket *HelloWorldHandler::createCBHelloWorldTwo()
 {
-    return new DataPacketImpl<HelloWorldTwo>();
+    return new CDataPacket<HelloWorldTwo>();
 }
 
-void HelloWorldHandler::processCBHelloWorldOne(DataPacket *data)
+void HelloWorldHandler::processCBHelloWorldOne(IDataPacket *data)
 {
     HelloWorldOne *hello = (HelloWorldOne *)data->getData();
     LOG(INFO) << "HelloWorldOne: " << hello->id();
@@ -89,7 +84,7 @@ void HelloWorldHandler::processCBHelloWorldOne(DataPacket *data)
     delete data;
 }
 
-void HelloWorldHandler::processCBHelloWorldTwo(DataPacket *data)
+void HelloWorldHandler::processCBHelloWorldTwo(IDataPacket *data)
 {
     HelloWorldTwo *hello = (HelloWorldTwo *)data->getData();
     LOG(INFO) << "HelloWorldTwo: " << hello->id();
@@ -99,14 +94,14 @@ void HelloWorldHandler::processCBHelloWorldTwo(DataPacket *data)
 
 bool HelloWorldHandler::init(uint32_t domain_id)
 {
-    ParticipantQosManager    manager("Participant_pubscriber");
+    CParticipantQosHandler   manager("Participant_pubscriber");
     std::vector<std::string> peer_locators = {"127.0.0.1:5100"};
     // manager.addTCPV4Transport(5101, peer_locators);
     manager.addUDPV4Transport();
     DomainParticipantQos participantQos = manager.getDomainParticipantQos();
 
     m_manager.initDomainParticipant(domain_id, participantQos);
-    m_manager.registerProxyWorker(this);
+    m_manager.registerProxyFactory(this);
     return true;
 }
 
@@ -114,7 +109,7 @@ bool HelloWorldHandler::registerPublisher(std::string topicName)
 {
     std::string typeName = getTypeNameByTopic(topicName);
     if (typeName.size() > 0) {
-        return m_manager.registerPublisher(topicName, typeName);
+        return m_manager.registerDataWriter(topicName, typeName);
     }
     return false;
 }
@@ -123,7 +118,7 @@ bool HelloWorldHandler::registerSubscriber(std::string topicName)
 {
     std::string typeName = getTypeNameByTopic(topicName);
     if (typeName.size() > 0) {
-        return m_manager.registerSubscriber(topicName, typeName);
+        return m_manager.registerDataReader(topicName, typeName);
     }
     return false;
 }
