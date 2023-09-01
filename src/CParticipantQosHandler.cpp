@@ -5,6 +5,7 @@
 #include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 #include <fastdds/rtps/transport/UDPv6TransportDescriptor.h>
 #include <fastdds/rtps/transport/shared_mem/SharedMemTransportDescriptor.h>
+#include <glog/logging.h>
 
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastdds::rtps;
@@ -71,6 +72,9 @@ void CParticipantQosHandler::addTCPV6Transport()
 void CParticipantQosHandler::addUDPV4Transport(const std::vector<std::string> &ipaddrs)
 {
     auto udp_transport = std::make_shared<UDPv4TransportDescriptor>();
+
+    udp_transport->sendBufferSize = 1024 * 1024 * 16;
+    udp_transport->receiveBufferSize = 1024 * 1024 * 16;
     // 是否使用对 send_to() 的非阻塞调用
     udp_transport->non_blocking_send = true;
     for (int i = 0; i < ipaddrs.size(); i++) {

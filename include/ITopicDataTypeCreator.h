@@ -7,7 +7,7 @@
 #include <fastdds/dds/topic/TopicDataType.hpp>
 
 typedef IDataPacket *(*DataPacketCreateCB)();
-typedef void (*DataPacketProcessCB)(IDataPacket *);
+typedef void (*DataPacketProcessCB)(void *, IDataPacket *);
 
 class ITopicDataTypeCreator
 {
@@ -17,8 +17,7 @@ public:
 
 public:
     virtual eprosima::fastdds::dds::TopicDataType *createTopicDataType(std::string typeName) = 0;
-    virtual DataPacketCreateCB                     getDataPacketCB(std::string typeName) = 0;
-    virtual DataPacketProcessCB                    getDataProcessCB(std::string typeName) = 0;
+    virtual DataPacketCreateCB                     getDataPacketCreateCB(std::string typeName) = 0;
 };
 
 #endif

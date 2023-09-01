@@ -16,12 +16,7 @@ TopicDataType *CTopicDataTypeFactory::createTopicDataType(std::string typeName)
     return m_creator->createTopicDataType(typeName);
 }
 
-DataPacketCreateCB CTopicDataTypeFactory::getDataPacketCB(std::string typeName)
+DataPacketCreateCB CTopicDataTypeFactory::getDataPacketCreateCB(std::string typeName)
 {
-    return m_creator->getDataPacketCB(typeName);
-}
-
-DataPacketProcessCB CTopicDataTypeFactory::getDataProcessCB(std::string typeName)
-{
-    return m_creator->getDataProcessCB(typeName);
+    return m_creator->getDataPacketCreateCB(typeName);
 }
