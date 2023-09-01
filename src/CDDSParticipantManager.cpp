@@ -1,6 +1,7 @@
 #include "CDDSParticipantManager.h"
 #include "CDDSTopicDataReader.h"
 #include <fastdds/dds/topic/TypeSupport.hpp>
+#include <glog/logging.h>
 
 using namespace eprosima::fastdds::dds;
 using namespace std;
@@ -40,13 +41,12 @@ bool CDDSParticipantManager::registerDataWriter(std::string topicName, std::stri
     return true;
 }
 
-bool CDDSParticipantManager::registerDataReader(std::string topicName, std::string typeName)
+bool CDDSParticipantManager::registerDataReader(std::string topicName, std::string typeName, DataPacketProcessCB processCb, void *cbArgs)
 {
     TypeSupport          typeSupport(m_proxyFactory->createTopicDataType(typeName));
-    DataPacketCreateCB   createCallback = m_proxyFactory->getDataPacketCB(typeName);
-    DataPacketProcessCB  processCallback = m_proxyFactory->getDataProcessCB(typeName);
+    DataPacketCreateCB   createCallback = m_proxyFactory->getDataPacketCreateCB(typeName);
     CDDSTopicDataReader *topicReader = new CDDSTopicDataReader();
-    topicReader->initDataReader(topicName, typeName, m_domainParticipant, typeSupport, createCallback, processCallback);
+    topicReader->initDataReader(topicName, typeName, m_domainParticipant, typeSupport, createCallback, processCb, cbArgs);
     if (m_mapReader.find(topicName) == m_mapReader.end()) {
         m_mapReader[topicName] = map<string, CDDSTopicDataReader *>();
     }
@@ -56,11 +56,15 @@ bool CDDSParticipantManager::registerDataReader(std::string topicName, std::stri
 
 bool CDDSParticipantManager::sendData(std::string topicName, std::string typeName, void *data)
 {
-    if (m_mapWriter.find(topicName) != m_mapWriter.end()) {
-        map<string, CDDSTopicDataWriter *> &mapWriter = m_mapWriter[topicName];
-        if (mapWriter.find(typeName) != mapWriter.end()) {
-            return mapWriter[typeName]->sendData(data);
-        }
+    if (m_mapWriter.find(topicName) == m_mapWriter.end()) {
+        LOG(WARNING) << "未找到当前订阅的TOPIC: " << topicName;
+        return false;
     }
+
+    map<string, CDDSTopicDataWriter *> &mapWriter = m_mapWriter[topicName];
+    if (mapWriter.find(typeName) != mapWriter.end()) {
+        return mapWriter[typeName]->sendData(data);
+    }
+    LOG(WARNING) << "未找到当前订阅的数据类型: " << typeName;
     return false;
 }

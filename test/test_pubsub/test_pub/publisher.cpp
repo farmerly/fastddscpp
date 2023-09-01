@@ -1,14 +1,17 @@
-#include "HelloWorldConstants.h"
-#include "HelloWorldHandler.h"
+#include "CDDSHandler.h"
+#include "DDSConstants.h"
+#include <glog/logging.h>
 #include <iostream>
+#include <memory>
+
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    HelloWorldHandler *handler = new HelloWorldHandler();
-    if (handler->init(10)) {
-        handler->registerPublisher(DDS_TOPIC_HELLO_WORLD_ONE);
-    }
+    shared_ptr<CDDSDataHandler> handler(new CDDSDataHandler());
+    handler->init(127, "test_pub");
+    handler->registerDataWriter(DDS_TOPIC_HELLO_WORLD_ONE);
+    handler->registerDataWriter(DDS_TOPIC_HELLO_WORLD_TWO);
 
     int index = 0;
     while (true) {
@@ -20,15 +23,11 @@ int main(int argc, char *argv[])
         helloTwo.id(++index);
         helloTwo.message("HelloWorldTwo");
 
-        if (handler->publish(DDS_TOPIC_HELLO_WORLD_ONE, &helloOne)) {
-            std::cout << "Message: " << helloOne.message() << " with index: " << helloOne.id() << " SENT" << std::endl;
-        }
-        if (handler->publish(DDS_TOPIC_HELLO_WORLD_TWO, &helloTwo)) {
-            std::cout << "Message: " << helloTwo.message() << " with index: " << helloTwo.id() << " SENT" << std::endl;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        LOG(INFO) << "发送数据";
+        handler->publishHelloWorldOne(&helloOne);
+        handler->publishHelloWorldTwo(&helloTwo);
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
 
-    delete handler;
     return 0;
 }
