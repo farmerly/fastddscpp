@@ -1,4 +1,5 @@
 #include "CDDSTopicDataWriter.h"
+#include <glog/logging.h>
 
 CDDSTopicDataWriter::CDDSTopicDataWriter()
 {
@@ -35,10 +36,10 @@ void CDDSTopicDataWriter::DDSDataWriterListener::on_publication_matched(eprosima
                                                                         const eprosima::fastdds::dds::PublicationMatchedStatus &info)
 {
     if (info.current_count_change == 1) {
-        std::cout << "Publisher matched" << std::endl;
+        LOG(INFO) << "\033[31mPublication matched\033[0m";
     } else if (info.current_count_change == -1) {
-        std::cout << "Publisher unmatched" << std::endl;
+        LOG(INFO) << "\033[31mPublication unmatched\033[0m";
     } else {
-        std::cout << info.current_count_change << " is not a valid value for PublicationMatchedStatus current count change" << std::endl;
+        LOG(INFO) << info.current_count_change << " is not a valid value for PublicationMatchedStatus current count change" << std::endl;
     }
 }

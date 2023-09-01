@@ -1,4 +1,5 @@
 #include "CDDSTopicDataReader.h"
+#include <glog/logging.h>
 
 CDDSTopicDataReader::CDDSTopicDataReader()
 {
@@ -13,14 +14,16 @@ bool CDDSTopicDataReader::initDataReader(std::string                          to
                                          CDDSDomainParticipant               *participant,
                                          eprosima::fastdds::dds::TypeSupport &typeSupport,
                                          IDataPacket *(*createCallback)(),
-                                         void (*processCallback)(IDataPacket *))
+                                         void (*processCallback)(void *, IDataPacket *),
+                                         void *processArgs)
 {
     // 需要先注册回调函数, 之后再创建 dataReader, 以防监听启动后回调方法为null
     if (!createCallback || !processCallback) {
         return false;
     }
-    m_readerListener.createCallback = createCallback;
-    m_readerListener.processCallback = processCallback;
+    m_readerListener.m_createCallback = createCallback;
+    m_readerListener.m_processCallback = processCallback;
+    m_readerListener.m_processArgs = processArgs;
     m_topic = participant->registerTopic(topicName, typeName, eprosima::fastdds::dds::TOPIC_QOS_DEFAULT, typeSupport);
     if (m_topic == nullptr) {
         return false;
@@ -37,27 +40,27 @@ void CDDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosim
                                                                          const eprosima::fastdds::dds::SubscriptionMatchedStatus &info)
 {
     if (info.current_count_change == 1) {
-        std::cout << "Subscriber matched" << std::endl;
+        LOG(INFO) << "\033[31mSubscription matched\033[0m";
     } else if (info.current_count_change == -1) {
-        std::cout << "Subscriber unmatched" << std::endl;
+        LOG(INFO) << "\033[31mSubscription unmatched\033[0m";
     } else {
-        std::cout << info.current_count_change << " is not a valid value for SubscriptionMatchedStatus current count change" << std::endl;
+        LOG(INFO) << info.current_count_change << " is not a valid value for SubscriptionMatchedStatus current count change";
     }
 }
 
 void CDDSTopicDataReader::DDSDataReaderListener::on_data_available(eprosima::fastdds::dds::DataReader *reader)
 {
     eprosima::fastdds::dds::SampleInfo info;
-    IDataPacket                       *m_data = createCallback();
+    IDataPacket                       *m_data = m_createCallback();
     ReturnCode_t                       retCode = reader->take_next_sample(m_data->getData(), &info);
     if (retCode == ReturnCode_t::RETCODE_OK) {
         if (info.valid_data) {
-            processCallback(m_data);
+            m_processCallback(m_processArgs, m_data);
         } else {
-            std::cout << "info invalid" << std::endl;
+            LOG(ERROR) << "info invalid";
         }
     } else {
-        std::cout << "take_next_sample error" << std::endl;
+        LOG(ERROR) << "take_next_sample error";
     }
 }
 

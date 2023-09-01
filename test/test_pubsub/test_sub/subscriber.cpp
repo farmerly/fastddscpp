@@ -1,17 +1,30 @@
-#include "HelloWorldConstants.h"
-#include "HelloWorldHandler.h"
+#include "CDDSHandler.h"
+#include "DDSConstants.h"
+#include <glog/logging.h>
 #include <iostream>
+#include <memory>
+
 using namespace std;
+
+void helloWorldOneCB(void *args, IDataPacket *data)
+{
+    LOG(INFO) << "收到数据";
+}
+
+void helloWorldTwoCB(void *args, IDataPacket *data)
+{
+    LOG(INFO) << "收到数据";
+}
 
 int main(int argc, char *argv[])
 {
-    HelloWorldHandler *handler = new HelloWorldHandler();
-    if (handler->init(10)) {
-        handler->registerSubscriber(DDS_TOPIC_HELLO_WORLD_ONE);
-    }
+    shared_ptr<CDDSDataHandler> handler(new CDDSDataHandler());
+    handler->init(127, "test_sub");
+    handler->registerDataReader(DDS_TOPIC_HELLO_WORLD_ONE, helloWorldOneCB, nullptr);
+    handler->registerDataReader(DDS_TOPIC_HELLO_WORLD_TWO, helloWorldTwoCB, nullptr);
+
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
-    delete handler;
     return 0;
 }
