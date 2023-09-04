@@ -34,15 +34,18 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
+#define HelloWorldTwo_max_cdr_typesize 272ULL;
+#define HelloWorldTwo_max_key_cdr_typesize 0ULL;
+
 HelloWorldTwo::HelloWorldTwo()
 {
-    // m_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@5891e32e
+    // unsigned long m_id
     m_id = 0;
-    // m_type com.eprosima.idl.parser.typecode.PrimitiveTypeCode@cb0ed20
+    // unsigned long m_type
     m_type = 0;
-    // m_subtype com.eprosima.idl.parser.typecode.PrimitiveTypeCode@8e24743
+    // unsigned long m_subtype
     m_subtype = 0;
-    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@74a10858
+    // string m_message
     m_message ="";
 
 }
@@ -113,22 +116,8 @@ bool HelloWorldTwo::operator !=(
 size_t HelloWorldTwo::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t initial_alignment = current_alignment;
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
-
-
-    return current_alignment - initial_alignment;
+    static_cast<void>(current_alignment);
+    return HelloWorldTwo_max_cdr_typesize;
 }
 
 size_t HelloWorldTwo::getCdrSerializedSize(
@@ -297,18 +286,12 @@ std::string& HelloWorldTwo::message()
     return m_message;
 }
 
+
 size_t HelloWorldTwo::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t current_align = current_alignment;
-
-
-
-
-
-
-
-    return current_align;
+    static_cast<void>(current_alignment);
+    return HelloWorldTwo_max_key_cdr_typesize;
 }
 
 bool HelloWorldTwo::isKeyDefined()
@@ -320,5 +303,4 @@ void HelloWorldTwo::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-        
 }

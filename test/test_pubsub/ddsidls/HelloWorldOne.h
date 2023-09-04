@@ -207,11 +207,11 @@ public:
     eProsima_user_DllExport std::string& message();
 
     /*!
-     * @brief This function returns the maximum serialized size of an object
-     * depending on the buffer alignment.
-     * @param current_alignment Buffer alignment.
-     * @return Maximum serialized size.
-     */
+    * @brief This function returns the maximum serialized size of an object
+    * depending on the buffer alignment.
+    * @param current_alignment Buffer alignment.
+    * @return Maximum serialized size.
+    */
     eProsima_user_DllExport static size_t getMaxCdrSerializedSize(
             size_t current_alignment = 0);
 
@@ -269,6 +269,7 @@ private:
     uint32_t m_type;
     uint32_t m_subtype;
     std::string m_message;
+
 };
 
 #endif // _FAST_DDS_GENERATED_HELLOWORLDONE_H_

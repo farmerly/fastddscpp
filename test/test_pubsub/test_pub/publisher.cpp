@@ -23,9 +23,12 @@ int main(int argc, char *argv[])
         helloTwo.id(++index);
         helloTwo.message("HelloWorldTwo");
 
-        LOG(INFO) << "发送数据";
-        handler->publishHelloWorldOne(&helloOne);
-        handler->publishHelloWorldTwo(&helloTwo);
+        if (handler->publishHelloWorldOne(&helloOne)) {
+            LOG(INFO) << "发送 HelloWorldOne 数据成功: " << helloOne.id();
+        }
+        if (handler->publishHelloWorldTwo(&helloTwo)) {
+            LOG(INFO) << "发送 HelloWorldTwo 数据成功: " << helloTwo.id();
+        }
         this_thread::sleep_for(chrono::milliseconds(500));
     }
 

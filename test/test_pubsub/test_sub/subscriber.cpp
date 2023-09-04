@@ -6,14 +6,22 @@
 
 using namespace std;
 
-void helloWorldOneCB(void *args, IDataPacket *data)
+void helloWorldOneCB(void *args, IDataPacket *packet)
 {
-    LOG(INFO) << "收到数据";
+    HelloWorldOne *data = (HelloWorldOne *)packet->getData();
+    LOG(INFO) << "收到 HelloWorldOne 数据: " << data->id();
+    if (packet) {
+        delete packet;
+    }
 }
 
-void helloWorldTwoCB(void *args, IDataPacket *data)
+void helloWorldTwoCB(void *args, IDataPacket *packet)
 {
-    LOG(INFO) << "收到数据";
+    HelloWorldTwo *data = (HelloWorldTwo *)packet->getData();
+    LOG(INFO) << "收到 HelloWorldTwo 数据: " << data->id();
+    if (packet) {
+        delete packet;
+    }
 }
 
 int main(int argc, char *argv[])
