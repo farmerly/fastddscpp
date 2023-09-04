@@ -1,5 +1,16 @@
-struct HelloWorldTwo
+struct DataBase
+{
+    long baseId;
+};
+
+struct ChildData : DataBase
+{
+    long childId;
+};
+
+struct HelloWorldTwo : DataBase
 {
     unsigned long index;
     string message;
+    sequence<ChildData> children;
 };

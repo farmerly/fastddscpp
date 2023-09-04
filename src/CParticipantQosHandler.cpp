@@ -87,4 +87,8 @@ void CParticipantQosHandler::addUDPV4Transport(const std::vector<std::string> &i
 
 void CParticipantQosHandler::addUDPV6Transport()
 {
+    auto udp_transport = std::make_shared<UDPv6TransportDescriptor>();
+    udp_transport->sendBufferSize = 1024 * 1024 * 16;
+    udp_transport->receiveBufferSize = 1024 * 1024 * 16;
+    m_participantQos.transport().user_transports.push_back(udp_transport);
 }

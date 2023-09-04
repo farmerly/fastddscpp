@@ -34,6 +34,134 @@
 #endif  // GEN_API_VER
 
 /*!
+ * @brief This class represents the TopicDataType of the type DataBase defined by the user in the IDL file.
+ * @ingroup HELLOWORLDTWO
+ */
+class DataBasePubSubType : public eprosima::fastdds::dds::TopicDataType
+{
+public:
+
+    typedef DataBase type;
+
+    eProsima_user_DllExport DataBasePubSubType();
+
+    eProsima_user_DllExport virtual ~DataBasePubSubType() override;
+
+    eProsima_user_DllExport virtual bool serialize(
+            void* data,
+            eprosima::fastrtps::rtps::SerializedPayload_t* payload) override;
+
+    eProsima_user_DllExport virtual bool deserialize(
+            eprosima::fastrtps::rtps::SerializedPayload_t* payload,
+            void* data) override;
+
+    eProsima_user_DllExport virtual std::function<uint32_t()> getSerializedSizeProvider(
+            void* data) override;
+
+    eProsima_user_DllExport virtual bool getKey(
+            void* data,
+            eprosima::fastrtps::rtps::InstanceHandle_t* ihandle,
+            bool force_md5 = false) override;
+
+    eProsima_user_DllExport virtual void* createData() override;
+
+    eProsima_user_DllExport virtual void deleteData(
+            void* data) override;
+
+#ifdef TOPIC_DATA_TYPE_API_HAS_IS_BOUNDED
+    eProsima_user_DllExport inline bool is_bounded() const override
+    {
+        return true;
+    }
+
+#endif  // TOPIC_DATA_TYPE_API_HAS_IS_BOUNDED
+
+#ifdef TOPIC_DATA_TYPE_API_HAS_IS_PLAIN
+    eProsima_user_DllExport inline bool is_plain() const override
+    {
+        return true;
+    }
+
+#endif  // TOPIC_DATA_TYPE_API_HAS_IS_PLAIN
+
+#ifdef TOPIC_DATA_TYPE_API_HAS_CONSTRUCT_SAMPLE
+    eProsima_user_DllExport inline bool construct_sample(
+            void* memory) const override
+    {
+        new (memory) DataBase();
+        return true;
+    }
+
+#endif  // TOPIC_DATA_TYPE_API_HAS_CONSTRUCT_SAMPLE
+
+    MD5 m_md5;
+    unsigned char* m_keyBuffer;
+};
+/*!
+ * @brief This class represents the TopicDataType of the type ChildData defined by the user in the IDL file.
+ * @ingroup HELLOWORLDTWO
+ */
+class ChildDataPubSubType : public eprosima::fastdds::dds::TopicDataType
+{
+public:
+
+    typedef ChildData type;
+
+    eProsima_user_DllExport ChildDataPubSubType();
+
+    eProsima_user_DllExport virtual ~ChildDataPubSubType() override;
+
+    eProsima_user_DllExport virtual bool serialize(
+            void* data,
+            eprosima::fastrtps::rtps::SerializedPayload_t* payload) override;
+
+    eProsima_user_DllExport virtual bool deserialize(
+            eprosima::fastrtps::rtps::SerializedPayload_t* payload,
+            void* data) override;
+
+    eProsima_user_DllExport virtual std::function<uint32_t()> getSerializedSizeProvider(
+            void* data) override;
+
+    eProsima_user_DllExport virtual bool getKey(
+            void* data,
+            eprosima::fastrtps::rtps::InstanceHandle_t* ihandle,
+            bool force_md5 = false) override;
+
+    eProsima_user_DllExport virtual void* createData() override;
+
+    eProsima_user_DllExport virtual void deleteData(
+            void* data) override;
+
+#ifdef TOPIC_DATA_TYPE_API_HAS_IS_BOUNDED
+    eProsima_user_DllExport inline bool is_bounded() const override
+    {
+        return true;
+    }
+
+#endif  // TOPIC_DATA_TYPE_API_HAS_IS_BOUNDED
+
+#ifdef TOPIC_DATA_TYPE_API_HAS_IS_PLAIN
+    eProsima_user_DllExport inline bool is_plain() const override
+    {
+        return true;
+    }
+
+#endif  // TOPIC_DATA_TYPE_API_HAS_IS_PLAIN
+
+#ifdef TOPIC_DATA_TYPE_API_HAS_CONSTRUCT_SAMPLE
+    eProsima_user_DllExport inline bool construct_sample(
+            void* memory) const override
+    {
+        new (memory) ChildData();
+        return true;
+    }
+
+#endif  // TOPIC_DATA_TYPE_API_HAS_CONSTRUCT_SAMPLE
+
+    MD5 m_md5;
+    unsigned char* m_keyBuffer;
+};
+/*!
  * @brief This class represents the TopicDataType of the type HelloWorldTwo defined by the user in the IDL file.
  * @ingroup HELLOWORLDTWO
  */

@@ -1,5 +1,6 @@
 #include "CDDSHandler.h"
 #include "DDSConstants.h"
+#include "HelloWorldTwo.h"
 #include <glog/logging.h>
 #include <iostream>
 #include <memory>
@@ -25,8 +26,12 @@ int main(int argc, char *argv[])
             LOG(INFO) << "\033[31m发送 HelloWorldOne 数据失败: " << helloOne.index() << "\033[0m";
         }
 
+        ChildData child;
+        child.baseId(index);
+        child.childId(index);
         HelloWorldTwo helloTwo;
         helloTwo.index(++index);
+        helloTwo.children().push_back(child);
         helloTwo.message("HelloWorldTwo");
         if (handler->publishHelloWorldTwo(&helloTwo)) {
             LOG(INFO) << "发送 HelloWorldTwo 数据成功: " << helloTwo.index();
