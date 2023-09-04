@@ -51,16 +51,17 @@ void CDDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosim
 void CDDSTopicDataReader::DDSDataReaderListener::on_data_available(eprosima::fastdds::dds::DataReader *reader)
 {
     eprosima::fastdds::dds::SampleInfo info;
-    IDataPacket                       *m_data = m_createCallback();
-    ReturnCode_t                       retCode = reader->take_next_sample(m_data->getData(), &info);
-    if (retCode == ReturnCode_t::RETCODE_OK) {
-        if (info.valid_data) {
-            m_processCallback(m_processArgs, m_data);
-        } else {
-            LOG(ERROR) << "info invalid";
-        }
+    IDataPacket                       *packet = m_createCallback();
+    ReturnCode_t                       retCode = reader->take_next_sample(packet->getData(), &info);
+    if (retCode == ReturnCode_t::RETCODE_OK && info.valid_data) {
+        m_processCallback(m_processArgs, packet);
     } else {
         LOG(ERROR) << "take_next_sample error";
+    }
+
+    if (packet) {
+        delete packet;
+        packet = nullptr;
     }
 }
 

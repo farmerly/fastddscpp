@@ -25,8 +25,8 @@ CDDSDataHandler::~CDDSDataHandler()
 bool CDDSDataHandler::init(uint32_t domain_id, std::string participantName)
 {
     CParticipantQosHandler manager(participantName);
-    // manager.addUDPV4Transport();
-    manager.addSHMTransport(1024 * 1024 * 16);
+    manager.addUDPV4Transport();
+    // manager.addSHMTransport(1024 * 1024 * 16);
     DomainParticipantQos participantQos = manager.getDomainParticipantQos();
 
     m_manager->initDomainParticipant(domain_id, participantQos);

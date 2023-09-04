@@ -8,20 +8,16 @@ using namespace std;
 
 void helloWorldOneCB(void *args, IDataPacket *packet)
 {
-    HelloWorldOne *data = (HelloWorldOne *)packet->getData();
+    HelloWorldOne *data = (HelloWorldOne *)packet->moveData();
     LOG(INFO) << "收到 HelloWorldOne 数据: " << data->id();
-    if (packet) {
-        delete packet;
-    }
+    delete data;
 }
 
 void helloWorldTwoCB(void *args, IDataPacket *packet)
 {
-    HelloWorldTwo *data = (HelloWorldTwo *)packet->getData();
+    HelloWorldTwo *data = (HelloWorldTwo *)packet->moveData();
     LOG(INFO) << "收到 HelloWorldTwo 数据: " << data->id();
-    if (packet) {
-        delete packet;
-    }
+    delete data;
 }
 
 int main(int argc, char *argv[])

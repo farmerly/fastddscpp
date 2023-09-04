@@ -8,4 +8,5 @@ public:
 
 public:
     virtual void *getData() = 0;
+    virtual void *moveData() = 0;
 };
