@@ -20,12 +20,20 @@ void helloWorldTwoCB(void *args, IDataPacket *packet)
     delete data;
 }
 
+void pcSrcTimeMatchCB(void *args, IDataPacket *packet)
+{
+    CPcSrcDataTimeMatch *data = (CPcSrcDataTimeMatch *)packet->moveData();
+    LOG(INFO) << "收到 CPcSrcDataTimeMatch 数据: " << data->unFrameId() << ", size: " << data->getCdrSerializedSize(*data);
+    delete data;
+}
+
 int main(int argc, char *argv[])
 {
     shared_ptr<CDDSDataHandler> handler(new CDDSDataHandler());
     handler->init(127, "test_sub");
     handler->registerDataReader(DDS_TOPIC_HELLO_WORLD_ONE, helloWorldOneCB, nullptr);
     handler->registerDataReader(DDS_TOPIC_HELLO_WORLD_TWO, helloWorldTwoCB, nullptr);
+    handler->registerDataReader(DDS_TOPIC_CPCSRC_TIMEMATCH, pcSrcTimeMatchCB, nullptr);
 
     while (true) {
         this_thread::sleep_for(chrono::milliseconds(500));

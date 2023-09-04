@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CDDSParticipantManager.h"
+#include "CPcSrcData.h"
 #include "HelloWorldOne.h"
 #include "HelloWorldTwo.h"
 #include "IDDSParticipantHandler.h"
@@ -20,6 +21,7 @@ public:
 public:
     bool publishHelloWorldOne(HelloWorldOne *data);
     bool publishHelloWorldTwo(HelloWorldTwo *data);
+    bool publishCPcSrcTimeMatch(CPcSrcDataTimeMatch *data);
 
 protected:
     eprosima::fastdds::dds::TopicDataType *createTopicDataType(std::string typeName) override;
@@ -29,6 +31,7 @@ private:
     std::string         getTypeNameByTopic(std::string topicName);
     static IDataPacket *createHelloWorldOneCB();
     static IDataPacket *createHelloWorldTwoCB();
+    static IDataPacket *createCPcSrcTimeMatchCB();
 
 private:
     CDDSParticipantManager *m_manager;

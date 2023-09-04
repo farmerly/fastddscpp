@@ -1,6 +1,7 @@
 #include "CDDSHandler.h"
 #include "CDataPacket.h"
 #include "CParticipantQosHandler.h"
+#include "CPcSrcDataPubSubTypes.h"
 #include "DDSConstants.h"
 #include "HelloWorldOnePubSubTypes.h"
 #include "HelloWorldTwoPubSubTypes.h"
@@ -75,12 +76,19 @@ bool CDDSDataHandler::publishHelloWorldTwo(HelloWorldTwo *data)
     return sendData(DDS_TOPIC_HELLO_WORLD_TWO, data);
 }
 
+bool CDDSDataHandler::publishCPcSrcTimeMatch(CPcSrcDataTimeMatch *data)
+{
+    return sendData(DDS_TOPIC_CPCSRC_TIMEMATCH, data);
+}
+
 eprosima::fastdds::dds::TopicDataType *CDDSDataHandler::createTopicDataType(std::string typeName)
 {
     if (!typeName.compare(DDS_TYPE_HELLO_WORLD_ONE)) {
         return new HelloWorldOnePubSubType();
     } else if (!typeName.compare(DDS_TYPE_HELLO_WORLD_TWO)) {
         return new HelloWorldTwoPubSubType();
+    } else if (!typeName.compare(DDS_TYPE_CPCSRC_TIMEMATCH)) {
+        return new CPcSrcDataTimeMatchPubSubType();
     } else {
         LOG(WARNING) << "Not found TopicDataType: " << typeName;
     }
@@ -93,6 +101,8 @@ DataPacketCreateCB CDDSDataHandler::getDataPacketCreateCB(std::string typeName)
         return createHelloWorldOneCB;
     } else if (!typeName.compare(DDS_TYPE_HELLO_WORLD_TWO)) {
         return createHelloWorldTwoCB;
+    } else if (!typeName.compare(DDS_TYPE_CPCSRC_TIMEMATCH)) {
+        return createCPcSrcTimeMatchCB;
     } else {
         LOG(WARNING) << "Not found DataPacketCB: " << typeName;
     }
@@ -105,6 +115,8 @@ std::string CDDSDataHandler::getTypeNameByTopic(std::string topicName)
         return DDS_TYPE_HELLO_WORLD_ONE;
     } else if (!topicName.compare(DDS_TOPIC_HELLO_WORLD_TWO)) {
         return DDS_TYPE_HELLO_WORLD_TWO;
+    } else if (!topicName.compare(DDS_TOPIC_CPCSRC_TIMEMATCH)) {
+        return DDS_TYPE_CPCSRC_TIMEMATCH;
     } else {
         LOG(WARNING) << "Not found typename by topic: " << topicName;
     }
@@ -117,6 +129,11 @@ IDataPacket *CDDSDataHandler::createHelloWorldOneCB()
 }
 
 IDataPacket *CDDSDataHandler::createHelloWorldTwoCB()
+{
+    return new CDataPacket<HelloWorldTwo>();
+}
+
+IDataPacket *CDDSDataHandler::createCPcSrcTimeMatchCB()
 {
     return new CDataPacket<HelloWorldTwo>();
 }
