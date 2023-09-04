@@ -34,17 +34,13 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
-#define HelloWorldTwo_max_cdr_typesize 272ULL;
+#define HelloWorldTwo_max_cdr_typesize 264ULL;
 #define HelloWorldTwo_max_key_cdr_typesize 0ULL;
 
 HelloWorldTwo::HelloWorldTwo()
 {
-    // unsigned long m_id
-    m_id = 0;
-    // unsigned long m_type
-    m_type = 0;
-    // unsigned long m_subtype
-    m_subtype = 0;
+    // unsigned long m_index
+    m_index = 0;
     // string m_message
     m_message ="";
 
@@ -54,25 +50,19 @@ HelloWorldTwo::~HelloWorldTwo()
 {
 
 
-
-
 }
 
 HelloWorldTwo::HelloWorldTwo(
         const HelloWorldTwo& x)
 {
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = x.m_message;
 }
 
 HelloWorldTwo::HelloWorldTwo(
         HelloWorldTwo&& x) noexcept 
 {
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = std::move(x.m_message);
 }
 
@@ -80,9 +70,7 @@ HelloWorldTwo& HelloWorldTwo::operator =(
         const HelloWorldTwo& x)
 {
 
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = x.m_message;
 
     return *this;
@@ -92,9 +80,7 @@ HelloWorldTwo& HelloWorldTwo::operator =(
         HelloWorldTwo&& x) noexcept
 {
 
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = std::move(x.m_message);
 
     return *this;
@@ -104,7 +90,7 @@ bool HelloWorldTwo::operator ==(
         const HelloWorldTwo& x) const
 {
 
-    return (m_id == x.m_id && m_type == x.m_type && m_subtype == x.m_subtype && m_message == x.m_message);
+    return (m_index == x.m_index && m_message == x.m_message);
 }
 
 bool HelloWorldTwo::operator !=(
@@ -131,12 +117,6 @@ size_t HelloWorldTwo::getCdrSerializedSize(
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.message().size() + 1;
 
 
@@ -147,9 +127,7 @@ void HelloWorldTwo::serialize(
         eprosima::fastcdr::Cdr& scdr) const
 {
 
-    scdr << m_id;
-    scdr << m_type;
-    scdr << m_subtype;
+    scdr << m_index;
     scdr << m_message.c_str();
 
 }
@@ -158,94 +136,36 @@ void HelloWorldTwo::deserialize(
         eprosima::fastcdr::Cdr& dcdr)
 {
 
-    dcdr >> m_id;
-    dcdr >> m_type;
-    dcdr >> m_subtype;
+    dcdr >> m_index;
     dcdr >> m_message;
 }
 
 /*!
- * @brief This function sets a value in member id
- * @param _id New value for member id
+ * @brief This function sets a value in member index
+ * @param _index New value for member index
  */
-void HelloWorldTwo::id(
-        uint32_t _id)
+void HelloWorldTwo::index(
+        uint32_t _index)
 {
-    m_id = _id;
+    m_index = _index;
 }
 
 /*!
- * @brief This function returns the value of member id
- * @return Value of member id
+ * @brief This function returns the value of member index
+ * @return Value of member index
  */
-uint32_t HelloWorldTwo::id() const
+uint32_t HelloWorldTwo::index() const
 {
-    return m_id;
+    return m_index;
 }
 
 /*!
- * @brief This function returns a reference to member id
- * @return Reference to member id
+ * @brief This function returns a reference to member index
+ * @return Reference to member index
  */
-uint32_t& HelloWorldTwo::id()
+uint32_t& HelloWorldTwo::index()
 {
-    return m_id;
-}
-
-/*!
- * @brief This function sets a value in member type
- * @param _type New value for member type
- */
-void HelloWorldTwo::type(
-        uint32_t _type)
-{
-    m_type = _type;
-}
-
-/*!
- * @brief This function returns the value of member type
- * @return Value of member type
- */
-uint32_t HelloWorldTwo::type() const
-{
-    return m_type;
-}
-
-/*!
- * @brief This function returns a reference to member type
- * @return Reference to member type
- */
-uint32_t& HelloWorldTwo::type()
-{
-    return m_type;
-}
-
-/*!
- * @brief This function sets a value in member subtype
- * @param _subtype New value for member subtype
- */
-void HelloWorldTwo::subtype(
-        uint32_t _subtype)
-{
-    m_subtype = _subtype;
-}
-
-/*!
- * @brief This function returns the value of member subtype
- * @return Value of member subtype
- */
-uint32_t HelloWorldTwo::subtype() const
-{
-    return m_subtype;
-}
-
-/*!
- * @brief This function returns a reference to member subtype
- * @return Reference to member subtype
- */
-uint32_t& HelloWorldTwo::subtype()
-{
-    return m_subtype;
+    return m_index;
 }
 
 /*!

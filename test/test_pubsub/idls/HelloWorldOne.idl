@@ -1,7 +1,5 @@
 struct HelloWorldOne
 {
-    unsigned long id;
-    unsigned long type;
-    unsigned long subtype;
-    string message;
+    unsigned long index;
+    sequence<octet, 10000000> points;
 };

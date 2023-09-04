@@ -9,14 +9,14 @@ using namespace std;
 void helloWorldOneCB(void *args, IDataPacket *packet)
 {
     HelloWorldOne *data = (HelloWorldOne *)packet->moveData();
-    LOG(INFO) << "收到 HelloWorldOne 数据: " << data->id();
+    LOG(INFO) << "收到 HelloWorldOne 数据: " << data->index() << ", size: " << data->getCdrSerializedSize(*data);
     delete data;
 }
 
 void helloWorldTwoCB(void *args, IDataPacket *packet)
 {
     HelloWorldTwo *data = (HelloWorldTwo *)packet->moveData();
-    LOG(INFO) << "收到 HelloWorldTwo 数据: " << data->id();
+    LOG(INFO) << "收到 HelloWorldTwo 数据: " << data->index() << ", size: " << data->getCdrSerializedSize(*data);
     delete data;
 }
 

@@ -13,23 +13,27 @@ int main(int argc, char *argv[])
     handler->registerDataWriter(DDS_TOPIC_HELLO_WORLD_ONE);
     handler->registerDataWriter(DDS_TOPIC_HELLO_WORLD_TWO);
 
-    int index = 0;
+    int                  index = 0;
+    std::vector<uint8_t> vecPoints(10000000);
     while (true) {
         HelloWorldOne helloOne;
-        HelloWorldTwo helloTwo;
-
-        helloOne.id(++index);
-        helloOne.message("HelloWorldOne");
-        helloTwo.id(++index);
-        helloTwo.message("HelloWorldTwo");
-
+        helloOne.index(++index);
+        helloOne.points(vecPoints);
         if (handler->publishHelloWorldOne(&helloOne)) {
-            LOG(INFO) << "发送 HelloWorldOne 数据成功: " << helloOne.id();
+            LOG(INFO) << "发送 HelloWorldOne 数据成功: " << helloOne.index();
+        } else {
+            LOG(INFO) << "\033[31m发送 HelloWorldOne 数据失败: " << helloOne.index() << "\033[0m";
         }
+
+        HelloWorldTwo helloTwo;
+        helloTwo.index(++index);
+        helloTwo.message("HelloWorldTwo");
         if (handler->publishHelloWorldTwo(&helloTwo)) {
-            LOG(INFO) << "发送 HelloWorldTwo 数据成功: " << helloTwo.id();
+            LOG(INFO) << "发送 HelloWorldTwo 数据成功: " << helloTwo.index();
+        } else {
+            LOG(INFO) << "\033[31m发送 HelloWorldTwo 数据失败: " << helloTwo.index() << "\033[0m";
         }
-        this_thread::sleep_for(chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(100));
     }
 
     return 0;

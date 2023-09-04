@@ -1,7 +1,5 @@
 struct HelloWorldTwo
 {
-    unsigned long id;
-    unsigned long type;
-    unsigned long subtype;
+    unsigned long index;
     string message;
 };

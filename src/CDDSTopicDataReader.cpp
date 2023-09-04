@@ -1,5 +1,8 @@
 #include "CDDSTopicDataReader.h"
+#include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <glog/logging.h>
+
+using namespace eprosima::fastdds::dds;
 
 CDDSTopicDataReader::CDDSTopicDataReader()
 {
@@ -24,11 +27,15 @@ bool CDDSTopicDataReader::initDataReader(std::string                          to
     m_readerListener.m_createCallback = createCallback;
     m_readerListener.m_processCallback = processCallback;
     m_readerListener.m_processArgs = processArgs;
-    m_topic = participant->registerTopic(topicName, typeName, eprosima::fastdds::dds::TOPIC_QOS_DEFAULT, typeSupport);
+
+    eprosima::fastdds::dds::TopicQos topicQos(TOPIC_QOS_DEFAULT);
+    m_topic = participant->registerTopic(topicName, typeName, topicQos, typeSupport);
     if (m_topic == nullptr) {
         return false;
     }
-    m_dataReader = participant->createDataReader(m_topic, eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT, m_readerListener);
+
+    eprosima::fastdds::dds::DataReaderQos dataReaderQos(DATAREADER_QOS_DEFAULT);
+    m_dataReader = participant->createDataReader(m_topic, dataReaderQos, m_readerListener);
     if (m_dataReader == nullptr) {
         delete m_topic;
         return false;
