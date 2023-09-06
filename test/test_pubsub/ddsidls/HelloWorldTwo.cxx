@@ -34,16 +34,9 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
-#define ChildData_max_cdr_typesize 8ULL;
-#define HelloWorldTwo_max_cdr_typesize 1072ULL;
-#define DataBase_max_cdr_typesize 4ULL;
-#define ChildData_max_key_cdr_typesize 0ULL;
-#define HelloWorldTwo_max_key_cdr_typesize 0ULL;
-#define DataBase_max_key_cdr_typesize 0ULL;
-
 DataBase::DataBase()
 {
-    // long m_baseId
+    // m_baseId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@578486a3
     m_baseId = 0;
 
 }
@@ -59,7 +52,7 @@ DataBase::DataBase(
 }
 
 DataBase::DataBase(
-        DataBase&& x) noexcept 
+        DataBase&& x)
 {
     m_baseId = x.m_baseId;
 }
@@ -74,7 +67,7 @@ DataBase& DataBase::operator =(
 }
 
 DataBase& DataBase::operator =(
-        DataBase&& x) noexcept
+        DataBase&& x)
 {
 
     m_baseId = x.m_baseId;
@@ -98,8 +91,13 @@ bool DataBase::operator !=(
 size_t DataBase::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    static_cast<void>(current_alignment);
-    return DataBase_max_cdr_typesize;
+    size_t initial_alignment = current_alignment;
+
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    return current_alignment - initial_alignment;
 }
 
 size_t DataBase::getCdrSerializedSize(
@@ -160,12 +158,14 @@ int32_t& DataBase::baseId()
 }
 
 
-
 size_t DataBase::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    static_cast<void>(current_alignment);
-    return DataBase_max_key_cdr_typesize;
+    size_t current_align = current_alignment;
+
+
+
+    return current_align;
 }
 
 bool DataBase::isKeyDefined()
@@ -177,11 +177,12 @@ void DataBase::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
+     
 }
 
 ChildData::ChildData()    : DataBase() 
 {
-    // long m_childId
+    // m_childId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@6043cd28
     m_childId = 0;
 
 }
@@ -197,7 +198,7 @@ ChildData::ChildData(
 }
 
 ChildData::ChildData(
-        ChildData&& x) noexcept     : DataBase(std::move(x)) 
+        ChildData&& x)    : DataBase(std::move(x)) 
 {
     m_childId = x.m_childId;
 }
@@ -213,7 +214,7 @@ ChildData& ChildData::operator =(
 }
 
 ChildData& ChildData::operator =(
-        ChildData&& x) noexcept
+        ChildData&& x)
 {
     DataBase::operator =(std::move(x)); 
 
@@ -239,8 +240,14 @@ bool ChildData::operator !=(
 size_t ChildData::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    static_cast<void>(current_alignment);
-    return ChildData_max_cdr_typesize;
+    size_t initial_alignment = current_alignment;
+
+    current_alignment += DataBase::getMaxCdrSerializedSize(current_alignment); 
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    return current_alignment - initial_alignment;
 }
 
 size_t ChildData::getCdrSerializedSize(
@@ -304,12 +311,15 @@ int32_t& ChildData::childId()
 }
 
 
-
 size_t ChildData::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    static_cast<void>(current_alignment);
-    return ChildData_max_key_cdr_typesize;
+    size_t current_align = current_alignment;
+
+    current_align += DataBase::getKeyMaxCdrSerializedSize(current_align); 
+
+
+    return current_align;
 }
 
 bool ChildData::isKeyDefined()
@@ -323,16 +333,17 @@ void ChildData::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
- DataBase::serializeKey(scdr);  
+    DataBase::serializeKey(scdr); 
+     
 }
 
 HelloWorldTwo::HelloWorldTwo()    : DataBase() 
 {
-    // unsigned long m_index
+    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@32eebfca
     m_index = 0;
-    // string m_message
+    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@1d371b2d
     m_message ="";
-    // sequence<ChildData> m_children
+    // m_children com.eprosima.idl.parser.typecode.SequenceTypeCode@543c6f6d
 
 
 }
@@ -353,7 +364,7 @@ HelloWorldTwo::HelloWorldTwo(
 }
 
 HelloWorldTwo::HelloWorldTwo(
-        HelloWorldTwo&& x) noexcept     : DataBase(std::move(x)) 
+        HelloWorldTwo&& x)    : DataBase(std::move(x)) 
 {
     m_index = x.m_index;
     m_message = std::move(x.m_message);
@@ -373,7 +384,7 @@ HelloWorldTwo& HelloWorldTwo::operator =(
 }
 
 HelloWorldTwo& HelloWorldTwo::operator =(
-        HelloWorldTwo&& x) noexcept
+        HelloWorldTwo&& x)
 {
     DataBase::operator =(std::move(x)); 
 
@@ -401,8 +412,24 @@ bool HelloWorldTwo::operator !=(
 size_t HelloWorldTwo::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    static_cast<void>(current_alignment);
-    return HelloWorldTwo_max_cdr_typesize;
+    size_t initial_alignment = current_alignment;
+
+    current_alignment += DataBase::getMaxCdrSerializedSize(current_alignment); 
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    for(size_t a = 0; a < 100; ++a)
+    {
+        current_alignment += ChildData::getMaxCdrSerializedSize(current_alignment);}
+
+
+    return current_alignment - initial_alignment;
 }
 
 size_t HelloWorldTwo::getCdrSerializedSize(
@@ -554,12 +581,18 @@ std::vector<ChildData>& HelloWorldTwo::children()
     return m_children;
 }
 
-
 size_t HelloWorldTwo::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    static_cast<void>(current_alignment);
-    return HelloWorldTwo_max_key_cdr_typesize;
+    size_t current_align = current_alignment;
+
+    current_align += DataBase::getKeyMaxCdrSerializedSize(current_align); 
+
+
+
+
+
+    return current_align;
 }
 
 bool HelloWorldTwo::isKeyDefined()
@@ -573,5 +606,6 @@ void HelloWorldTwo::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
- DataBase::serializeKey(scdr);  
+    DataBase::serializeKey(scdr); 
+       
 }

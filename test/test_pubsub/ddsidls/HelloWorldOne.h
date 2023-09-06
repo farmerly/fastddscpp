@@ -93,7 +93,7 @@ public:
      * @param x Reference to the object HelloWorldOne that will be copied.
      */
     eProsima_user_DllExport HelloWorldOne(
-            HelloWorldOne&& x) noexcept;
+            HelloWorldOne&& x);
 
     /*!
      * @brief Copy assignment.
@@ -107,7 +107,7 @@ public:
      * @param x Reference to the object HelloWorldOne that will be copied.
      */
     eProsima_user_DllExport HelloWorldOne& operator =(
-            HelloWorldOne&& x) noexcept;
+            HelloWorldOne&& x);
 
     /*!
      * @brief Comparison operator.
@@ -169,11 +169,11 @@ public:
     eProsima_user_DllExport std::vector<uint8_t>& points();
 
     /*!
-    * @brief This function returns the maximum serialized size of an object
-    * depending on the buffer alignment.
-    * @param current_alignment Buffer alignment.
-    * @return Maximum serialized size.
-    */
+     * @brief This function returns the maximum serialized size of an object
+     * depending on the buffer alignment.
+     * @param current_alignment Buffer alignment.
+     * @return Maximum serialized size.
+     */
     eProsima_user_DllExport static size_t getMaxCdrSerializedSize(
             size_t current_alignment = 0);
 
@@ -229,7 +229,6 @@ private:
 
     uint32_t m_index;
     std::vector<uint8_t> m_points;
-
 };
 
 #endif // _FAST_DDS_GENERATED_HELLOWORLDONE_H_
