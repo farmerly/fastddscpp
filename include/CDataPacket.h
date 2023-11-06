@@ -30,6 +30,13 @@ public:
         return m_data;
     }
 
+    void *moveData() override
+    {
+        T *data = m_data;
+        m_data = nullptr;
+        return data;
+    }
+
 private:
     T *m_data;
 };

@@ -25,5 +25,4 @@ private:
                                     const eprosima::fastdds::dds::PublicationMatchedStatus &info);
     } m_writerListener;
     eprosima::fastdds::dds::DataWriter *m_dataWriter;
-    eprosima::fastdds::dds::Topic      *m_topic;
 };
