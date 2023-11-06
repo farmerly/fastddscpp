@@ -1,5 +1,8 @@
 #include "CDDSTopicDataReader.h"
+#include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <glog/logging.h>
+
+using namespace eprosima::fastdds::dds;
 
 CDDSTopicDataReader::CDDSTopicDataReader()
 {
@@ -24,16 +27,16 @@ bool CDDSTopicDataReader::initDataReader(std::string                          to
     m_readerListener.m_createCallback = createCallback;
     m_readerListener.m_processCallback = processCallback;
     m_readerListener.m_processArgs = processArgs;
-    m_topic = participant->registerTopic(topicName, typeName, eprosima::fastdds::dds::TOPIC_QOS_DEFAULT, typeSupport);
-    if (m_topic == nullptr) {
+
+    TopicQos topicQos(TOPIC_QOS_DEFAULT);
+    Topic   *topic = participant->registerTopic(topicName, typeName, topicQos, typeSupport);
+    if (topic == nullptr) {
         return false;
     }
-    m_dataReader = participant->createDataReader(m_topic, eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT, m_readerListener);
-    if (m_dataReader == nullptr) {
-        delete m_topic;
-        return false;
-    }
-    return true;
+
+    eprosima::fastdds::dds::DataReaderQos dataReaderQos(DATAREADER_QOS_DEFAULT);
+    m_dataReader = participant->createDataReader(topic, dataReaderQos, m_readerListener);
+    return (m_dataReader != nullptr);
 }
 
 void CDDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosima::fastdds::dds::DataReader                      *reader,
@@ -51,16 +54,17 @@ void CDDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosim
 void CDDSTopicDataReader::DDSDataReaderListener::on_data_available(eprosima::fastdds::dds::DataReader *reader)
 {
     eprosima::fastdds::dds::SampleInfo info;
-    IDataPacket                       *m_data = m_createCallback();
-    ReturnCode_t                       retCode = reader->take_next_sample(m_data->getData(), &info);
-    if (retCode == ReturnCode_t::RETCODE_OK) {
-        if (info.valid_data) {
-            m_processCallback(m_processArgs, m_data);
-        } else {
-            LOG(ERROR) << "info invalid";
-        }
+    IDataPacket                       *packet = m_createCallback();
+    ReturnCode_t                       retCode = reader->take_next_sample(packet->getData(), &info);
+    if (retCode == ReturnCode_t::RETCODE_OK && info.valid_data) {
+        m_processCallback(m_processArgs, packet);
     } else {
         LOG(ERROR) << "take_next_sample error";
+    }
+
+    if (packet) {
+        delete packet;
+        packet = nullptr;
     }
 }
 

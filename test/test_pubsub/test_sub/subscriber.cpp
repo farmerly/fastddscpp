@@ -6,14 +6,18 @@
 
 using namespace std;
 
-void helloWorldOneCB(void *args, IDataPacket *data)
+void helloWorldOneCB(void *args, IDataPacket *packet)
 {
-    LOG(INFO) << "收到数据";
+    HelloWorldOne *data = (HelloWorldOne *)packet->moveData();
+    LOG(INFO) << "收到 HelloWorldOne 数据: " << data->index() << ", size: " << data->getCdrSerializedSize(*data);
+    delete data;
 }
 
-void helloWorldTwoCB(void *args, IDataPacket *data)
+void helloWorldTwoCB(void *args, IDataPacket *packet)
 {
-    LOG(INFO) << "收到数据";
+    HelloWorldTwo *data = (HelloWorldTwo *)packet->moveData();
+    LOG(INFO) << "收到 HelloWorldTwo 数据: " << data->index() << ", size: " << data->getCdrSerializedSize(*data);
+    delete data;
 }
 
 int main(int argc, char *argv[])

@@ -1,7 +1,0 @@
-struct HelloWorldOne
-{
-    unsigned long id;
-    unsigned long type;
-    unsigned long subtype;
-    string message;
-};

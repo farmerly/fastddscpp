@@ -93,7 +93,7 @@ public:
      * @param x Reference to the object HelloWorldOne that will be copied.
      */
     eProsima_user_DllExport HelloWorldOne(
-            HelloWorldOne&& x) noexcept;
+            HelloWorldOne&& x);
 
     /*!
      * @brief Copy assignment.
@@ -107,7 +107,7 @@ public:
      * @param x Reference to the object HelloWorldOne that will be copied.
      */
     eProsima_user_DllExport HelloWorldOne& operator =(
-            HelloWorldOne&& x) noexcept;
+            HelloWorldOne&& x);
 
     /*!
      * @brief Comparison operator.
@@ -124,87 +124,49 @@ public:
             const HelloWorldOne& x) const;
 
     /*!
-     * @brief This function sets a value in member id
-     * @param _id New value for member id
+     * @brief This function sets a value in member index
+     * @param _index New value for member index
      */
-    eProsima_user_DllExport void id(
-            uint32_t _id);
+    eProsima_user_DllExport void index(
+            uint32_t _index);
 
     /*!
-     * @brief This function returns the value of member id
-     * @return Value of member id
+     * @brief This function returns the value of member index
+     * @return Value of member index
      */
-    eProsima_user_DllExport uint32_t id() const;
+    eProsima_user_DllExport uint32_t index() const;
 
     /*!
-     * @brief This function returns a reference to member id
-     * @return Reference to member id
+     * @brief This function returns a reference to member index
+     * @return Reference to member index
      */
-    eProsima_user_DllExport uint32_t& id();
+    eProsima_user_DllExport uint32_t& index();
 
     /*!
-     * @brief This function sets a value in member type
-     * @param _type New value for member type
+     * @brief This function copies the value in member points
+     * @param _points New value to be copied in member points
      */
-    eProsima_user_DllExport void type(
-            uint32_t _type);
+    eProsima_user_DllExport void points(
+            const std::vector<uint8_t>& _points);
 
     /*!
-     * @brief This function returns the value of member type
-     * @return Value of member type
+     * @brief This function moves the value in member points
+     * @param _points New value to be moved in member points
      */
-    eProsima_user_DllExport uint32_t type() const;
+    eProsima_user_DllExport void points(
+            std::vector<uint8_t>&& _points);
 
     /*!
-     * @brief This function returns a reference to member type
-     * @return Reference to member type
+     * @brief This function returns a constant reference to member points
+     * @return Constant reference to member points
      */
-    eProsima_user_DllExport uint32_t& type();
+    eProsima_user_DllExport const std::vector<uint8_t>& points() const;
 
     /*!
-     * @brief This function sets a value in member subtype
-     * @param _subtype New value for member subtype
+     * @brief This function returns a reference to member points
+     * @return Reference to member points
      */
-    eProsima_user_DllExport void subtype(
-            uint32_t _subtype);
-
-    /*!
-     * @brief This function returns the value of member subtype
-     * @return Value of member subtype
-     */
-    eProsima_user_DllExport uint32_t subtype() const;
-
-    /*!
-     * @brief This function returns a reference to member subtype
-     * @return Reference to member subtype
-     */
-    eProsima_user_DllExport uint32_t& subtype();
-
-    /*!
-     * @brief This function copies the value in member message
-     * @param _message New value to be copied in member message
-     */
-    eProsima_user_DllExport void message(
-            const std::string& _message);
-
-    /*!
-     * @brief This function moves the value in member message
-     * @param _message New value to be moved in member message
-     */
-    eProsima_user_DllExport void message(
-            std::string&& _message);
-
-    /*!
-     * @brief This function returns a constant reference to member message
-     * @return Constant reference to member message
-     */
-    eProsima_user_DllExport const std::string& message() const;
-
-    /*!
-     * @brief This function returns a reference to member message
-     * @return Reference to member message
-     */
-    eProsima_user_DllExport std::string& message();
+    eProsima_user_DllExport std::vector<uint8_t>& points();
 
     /*!
      * @brief This function returns the maximum serialized size of an object
@@ -265,10 +227,8 @@ public:
 
 private:
 
-    uint32_t m_id;
-    uint32_t m_type;
-    uint32_t m_subtype;
-    std::string m_message;
+    uint32_t m_index;
+    std::vector<uint8_t> m_points;
 };
 
 #endif // _FAST_DDS_GENERATED_HELLOWORLDONE_H_

@@ -36,14 +36,10 @@ using namespace eprosima::fastcdr::exception;
 
 HelloWorldOne::HelloWorldOne()
 {
-    // m_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@5891e32e
-    m_id = 0;
-    // m_type com.eprosima.idl.parser.typecode.PrimitiveTypeCode@cb0ed20
-    m_type = 0;
-    // m_subtype com.eprosima.idl.parser.typecode.PrimitiveTypeCode@8e24743
-    m_subtype = 0;
-    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@74a10858
-    m_message ="";
+    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@23faf8f2
+    m_index = 0;
+    // m_points com.eprosima.idl.parser.typecode.SequenceTypeCode@4e7dc304
+
 
 }
 
@@ -51,48 +47,38 @@ HelloWorldOne::~HelloWorldOne()
 {
 
 
-
-
 }
 
 HelloWorldOne::HelloWorldOne(
         const HelloWorldOne& x)
 {
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
-    m_message = x.m_message;
+    m_index = x.m_index;
+    m_points = x.m_points;
 }
 
 HelloWorldOne::HelloWorldOne(
-        HelloWorldOne&& x) noexcept 
+        HelloWorldOne&& x)
 {
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
-    m_message = std::move(x.m_message);
+    m_index = x.m_index;
+    m_points = std::move(x.m_points);
 }
 
 HelloWorldOne& HelloWorldOne::operator =(
         const HelloWorldOne& x)
 {
 
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
-    m_message = x.m_message;
+    m_index = x.m_index;
+    m_points = x.m_points;
 
     return *this;
 }
 
 HelloWorldOne& HelloWorldOne::operator =(
-        HelloWorldOne&& x) noexcept
+        HelloWorldOne&& x)
 {
 
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
-    m_message = std::move(x.m_message);
+    m_index = x.m_index;
+    m_points = std::move(x.m_points);
 
     return *this;
 }
@@ -101,7 +87,7 @@ bool HelloWorldOne::operator ==(
         const HelloWorldOne& x) const
 {
 
-    return (m_id == x.m_id && m_type == x.m_type && m_subtype == x.m_subtype && m_message == x.m_message);
+    return (m_index == x.m_index && m_points == x.m_points);
 }
 
 bool HelloWorldOne::operator !=(
@@ -121,11 +107,9 @@ size_t HelloWorldOne::getMaxCdrSerializedSize(
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+    current_alignment += (10000000 * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
 
     return current_alignment - initial_alignment;
@@ -144,11 +128,12 @@ size_t HelloWorldOne::getCdrSerializedSize(
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+    if (data.points().size() > 0)
+    {
+        current_alignment += (data.points().size() * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+    }
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.message().size() + 1;
 
 
     return current_alignment - initial_alignment;
@@ -158,10 +143,8 @@ void HelloWorldOne::serialize(
         eprosima::fastcdr::Cdr& scdr) const
 {
 
-    scdr << m_id;
-    scdr << m_type;
-    scdr << m_subtype;
-    scdr << m_message.c_str();
+    scdr << m_index;
+    scdr << m_points;
 
 }
 
@@ -169,140 +152,80 @@ void HelloWorldOne::deserialize(
         eprosima::fastcdr::Cdr& dcdr)
 {
 
-    dcdr >> m_id;
-    dcdr >> m_type;
-    dcdr >> m_subtype;
-    dcdr >> m_message;
+    dcdr >> m_index;
+    dcdr >> m_points;
 }
 
 /*!
- * @brief This function sets a value in member id
- * @param _id New value for member id
+ * @brief This function sets a value in member index
+ * @param _index New value for member index
  */
-void HelloWorldOne::id(
-        uint32_t _id)
+void HelloWorldOne::index(
+        uint32_t _index)
 {
-    m_id = _id;
+    m_index = _index;
 }
 
 /*!
- * @brief This function returns the value of member id
- * @return Value of member id
+ * @brief This function returns the value of member index
+ * @return Value of member index
  */
-uint32_t HelloWorldOne::id() const
+uint32_t HelloWorldOne::index() const
 {
-    return m_id;
+    return m_index;
 }
 
 /*!
- * @brief This function returns a reference to member id
- * @return Reference to member id
+ * @brief This function returns a reference to member index
+ * @return Reference to member index
  */
-uint32_t& HelloWorldOne::id()
+uint32_t& HelloWorldOne::index()
 {
-    return m_id;
+    return m_index;
 }
 
 /*!
- * @brief This function sets a value in member type
- * @param _type New value for member type
+ * @brief This function copies the value in member points
+ * @param _points New value to be copied in member points
  */
-void HelloWorldOne::type(
-        uint32_t _type)
+void HelloWorldOne::points(
+        const std::vector<uint8_t>& _points)
 {
-    m_type = _type;
+    m_points = _points;
 }
 
 /*!
- * @brief This function returns the value of member type
- * @return Value of member type
+ * @brief This function moves the value in member points
+ * @param _points New value to be moved in member points
  */
-uint32_t HelloWorldOne::type() const
+void HelloWorldOne::points(
+        std::vector<uint8_t>&& _points)
 {
-    return m_type;
+    m_points = std::move(_points);
 }
 
 /*!
- * @brief This function returns a reference to member type
- * @return Reference to member type
+ * @brief This function returns a constant reference to member points
+ * @return Constant reference to member points
  */
-uint32_t& HelloWorldOne::type()
+const std::vector<uint8_t>& HelloWorldOne::points() const
 {
-    return m_type;
+    return m_points;
 }
 
 /*!
- * @brief This function sets a value in member subtype
- * @param _subtype New value for member subtype
+ * @brief This function returns a reference to member points
+ * @return Reference to member points
  */
-void HelloWorldOne::subtype(
-        uint32_t _subtype)
+std::vector<uint8_t>& HelloWorldOne::points()
 {
-    m_subtype = _subtype;
-}
-
-/*!
- * @brief This function returns the value of member subtype
- * @return Value of member subtype
- */
-uint32_t HelloWorldOne::subtype() const
-{
-    return m_subtype;
-}
-
-/*!
- * @brief This function returns a reference to member subtype
- * @return Reference to member subtype
- */
-uint32_t& HelloWorldOne::subtype()
-{
-    return m_subtype;
-}
-
-/*!
- * @brief This function copies the value in member message
- * @param _message New value to be copied in member message
- */
-void HelloWorldOne::message(
-        const std::string& _message)
-{
-    m_message = _message;
-}
-
-/*!
- * @brief This function moves the value in member message
- * @param _message New value to be moved in member message
- */
-void HelloWorldOne::message(
-        std::string&& _message)
-{
-    m_message = std::move(_message);
-}
-
-/*!
- * @brief This function returns a constant reference to member message
- * @return Constant reference to member message
- */
-const std::string& HelloWorldOne::message() const
-{
-    return m_message;
-}
-
-/*!
- * @brief This function returns a reference to member message
- * @return Reference to member message
- */
-std::string& HelloWorldOne::message()
-{
-    return m_message;
+    return m_points;
 }
 
 size_t HelloWorldOne::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t current_align = current_alignment;
-
-
 
 
 
@@ -320,5 +243,5 @@ void HelloWorldOne::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-        
+      
 }

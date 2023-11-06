@@ -1,5 +1,8 @@
 #include "CDDSTopicDataWriter.h"
+#include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
 #include <glog/logging.h>
+
+using namespace eprosima::fastdds::dds;
 
 CDDSTopicDataWriter::CDDSTopicDataWriter()
 {
@@ -14,17 +17,15 @@ bool CDDSTopicDataWriter::initDataWriter(std::string                          to
                                          CDDSDomainParticipant               *participant,
                                          eprosima::fastdds::dds::TypeSupport &typeSupport)
 {
-    m_topic = participant->registerTopic(topicName, typeName, eprosima::fastdds::dds::TOPIC_QOS_DEFAULT, typeSupport);
-    if (m_topic == nullptr) {
+    TopicQos topicQos(TOPIC_QOS_DEFAULT);
+    Topic   *topic = participant->registerTopic(topicName, typeName, topicQos, typeSupport);
+    if (topic == nullptr) {
         return false;
     }
 
-    m_dataWriter = participant->createDataWriter(m_topic, eprosima::fastdds::dds::DATAWRITER_QOS_DEFAULT, m_writerListener);
-    if (m_dataWriter == nullptr) {
-        delete m_topic;
-        return false;
-    }
-    return true;
+    eprosima::fastdds::dds::DataWriterQos dataWriterQos(DATAWRITER_QOS_DEFAULT);
+    m_dataWriter = participant->createDataWriter(topic, dataWriterQos, m_writerListener);
+    return (m_dataWriter != nullptr);
 }
 
 bool CDDSTopicDataWriter::sendData(void *data)

@@ -34,16 +34,317 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
-HelloWorldTwo::HelloWorldTwo()
+DataBase::DataBase()
 {
-    // m_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@5891e32e
-    m_id = 0;
-    // m_type com.eprosima.idl.parser.typecode.PrimitiveTypeCode@cb0ed20
-    m_type = 0;
-    // m_subtype com.eprosima.idl.parser.typecode.PrimitiveTypeCode@8e24743
-    m_subtype = 0;
-    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@74a10858
+    // m_baseId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@578486a3
+    m_baseId = 0;
+
+}
+
+DataBase::~DataBase()
+{
+}
+
+DataBase::DataBase(
+        const DataBase& x)
+{
+    m_baseId = x.m_baseId;
+}
+
+DataBase::DataBase(
+        DataBase&& x)
+{
+    m_baseId = x.m_baseId;
+}
+
+DataBase& DataBase::operator =(
+        const DataBase& x)
+{
+
+    m_baseId = x.m_baseId;
+
+    return *this;
+}
+
+DataBase& DataBase::operator =(
+        DataBase&& x)
+{
+
+    m_baseId = x.m_baseId;
+
+    return *this;
+}
+
+bool DataBase::operator ==(
+        const DataBase& x) const
+{
+
+    return (m_baseId == x.m_baseId);
+}
+
+bool DataBase::operator !=(
+        const DataBase& x) const
+{
+    return !(*this == x);
+}
+
+size_t DataBase::getMaxCdrSerializedSize(
+        size_t current_alignment)
+{
+    size_t initial_alignment = current_alignment;
+
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    return current_alignment - initial_alignment;
+}
+
+size_t DataBase::getCdrSerializedSize(
+        const DataBase& data,
+        size_t current_alignment)
+{
+    (void)data;
+    size_t initial_alignment = current_alignment;
+
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    return current_alignment - initial_alignment;
+}
+
+void DataBase::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+
+    scdr << m_baseId;
+
+}
+
+void DataBase::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+
+    dcdr >> m_baseId;
+}
+
+/*!
+ * @brief This function sets a value in member baseId
+ * @param _baseId New value for member baseId
+ */
+void DataBase::baseId(
+        int32_t _baseId)
+{
+    m_baseId = _baseId;
+}
+
+/*!
+ * @brief This function returns the value of member baseId
+ * @return Value of member baseId
+ */
+int32_t DataBase::baseId() const
+{
+    return m_baseId;
+}
+
+/*!
+ * @brief This function returns a reference to member baseId
+ * @return Reference to member baseId
+ */
+int32_t& DataBase::baseId()
+{
+    return m_baseId;
+}
+
+
+size_t DataBase::getKeyMaxCdrSerializedSize(
+        size_t current_alignment)
+{
+    size_t current_align = current_alignment;
+
+
+
+    return current_align;
+}
+
+bool DataBase::isKeyDefined()
+{
+    return false;
+}
+
+void DataBase::serializeKey(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    (void) scdr;
+     
+}
+
+ChildData::ChildData()    : DataBase() 
+{
+    // m_childId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@6043cd28
+    m_childId = 0;
+
+}
+
+ChildData::~ChildData()
+{
+}
+
+ChildData::ChildData(
+        const ChildData& x)    : DataBase(x) 
+{
+    m_childId = x.m_childId;
+}
+
+ChildData::ChildData(
+        ChildData&& x)    : DataBase(std::move(x)) 
+{
+    m_childId = x.m_childId;
+}
+
+ChildData& ChildData::operator =(
+        const ChildData& x)
+{
+    DataBase::operator =(x); 
+
+    m_childId = x.m_childId;
+
+    return *this;
+}
+
+ChildData& ChildData::operator =(
+        ChildData&& x)
+{
+    DataBase::operator =(std::move(x)); 
+
+    m_childId = x.m_childId;
+
+    return *this;
+}
+
+bool ChildData::operator ==(
+        const ChildData& x) const
+{
+     if (DataBase::operator !=(x)) return false; 
+
+    return (m_childId == x.m_childId);
+}
+
+bool ChildData::operator !=(
+        const ChildData& x) const
+{
+    return !(*this == x);
+}
+
+size_t ChildData::getMaxCdrSerializedSize(
+        size_t current_alignment)
+{
+    size_t initial_alignment = current_alignment;
+
+    current_alignment += DataBase::getMaxCdrSerializedSize(current_alignment); 
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    return current_alignment - initial_alignment;
+}
+
+size_t ChildData::getCdrSerializedSize(
+        const ChildData& data,
+        size_t current_alignment)
+{
+    (void)data;
+    size_t initial_alignment = current_alignment;
+
+    current_alignment += DataBase::getCdrSerializedSize(data, current_alignment); 
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    return current_alignment - initial_alignment;
+}
+
+void ChildData::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    DataBase::serialize(scdr); 
+
+    scdr << m_childId;
+
+}
+
+void ChildData::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    DataBase::deserialize(dcdr); 
+
+    dcdr >> m_childId;
+}
+
+/*!
+ * @brief This function sets a value in member childId
+ * @param _childId New value for member childId
+ */
+void ChildData::childId(
+        int32_t _childId)
+{
+    m_childId = _childId;
+}
+
+/*!
+ * @brief This function returns the value of member childId
+ * @return Value of member childId
+ */
+int32_t ChildData::childId() const
+{
+    return m_childId;
+}
+
+/*!
+ * @brief This function returns a reference to member childId
+ * @return Reference to member childId
+ */
+int32_t& ChildData::childId()
+{
+    return m_childId;
+}
+
+
+size_t ChildData::getKeyMaxCdrSerializedSize(
+        size_t current_alignment)
+{
+    size_t current_align = current_alignment;
+
+    current_align += DataBase::getKeyMaxCdrSerializedSize(current_align); 
+
+
+    return current_align;
+}
+
+bool ChildData::isKeyDefined()
+{
+    if (DataBase::isKeyDefined())
+        return true;
+     return false;
+}
+
+void ChildData::serializeKey(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    (void) scdr;
+    DataBase::serializeKey(scdr); 
+     
+}
+
+HelloWorldTwo::HelloWorldTwo()    : DataBase() 
+{
+    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@32eebfca
+    m_index = 0;
+    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@1d371b2d
     m_message ="";
+    // m_children com.eprosima.idl.parser.typecode.SequenceTypeCode@543c6f6d
+
 
 }
 
@@ -52,47 +353,44 @@ HelloWorldTwo::~HelloWorldTwo()
 
 
 
-
 }
 
 HelloWorldTwo::HelloWorldTwo(
-        const HelloWorldTwo& x)
+        const HelloWorldTwo& x)    : DataBase(x) 
 {
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = x.m_message;
+    m_children = x.m_children;
 }
 
 HelloWorldTwo::HelloWorldTwo(
-        HelloWorldTwo&& x) noexcept 
+        HelloWorldTwo&& x)    : DataBase(std::move(x)) 
 {
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = std::move(x.m_message);
+    m_children = std::move(x.m_children);
 }
 
 HelloWorldTwo& HelloWorldTwo::operator =(
         const HelloWorldTwo& x)
 {
+    DataBase::operator =(x); 
 
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = x.m_message;
+    m_children = x.m_children;
 
     return *this;
 }
 
 HelloWorldTwo& HelloWorldTwo::operator =(
-        HelloWorldTwo&& x) noexcept
+        HelloWorldTwo&& x)
 {
+    DataBase::operator =(std::move(x)); 
 
-    m_id = x.m_id;
-    m_type = x.m_type;
-    m_subtype = x.m_subtype;
+    m_index = x.m_index;
     m_message = std::move(x.m_message);
+    m_children = std::move(x.m_children);
 
     return *this;
 }
@@ -100,8 +398,9 @@ HelloWorldTwo& HelloWorldTwo::operator =(
 bool HelloWorldTwo::operator ==(
         const HelloWorldTwo& x) const
 {
+     if (DataBase::operator !=(x)) return false; 
 
-    return (m_id == x.m_id && m_type == x.m_type && m_subtype == x.m_subtype && m_message == x.m_message);
+    return (m_index == x.m_index && m_message == x.m_message && m_children == x.m_children);
 }
 
 bool HelloWorldTwo::operator !=(
@@ -115,17 +414,19 @@ size_t HelloWorldTwo::getMaxCdrSerializedSize(
 {
     size_t initial_alignment = current_alignment;
 
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
+    current_alignment += DataBase::getMaxCdrSerializedSize(current_alignment); 
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    for(size_t a = 0; a < 100; ++a)
+    {
+        current_alignment += ChildData::getMaxCdrSerializedSize(current_alignment);}
 
 
     return current_alignment - initial_alignment;
@@ -138,17 +439,19 @@ size_t HelloWorldTwo::getCdrSerializedSize(
     (void)data;
     size_t initial_alignment = current_alignment;
 
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
+    current_alignment += DataBase::getCdrSerializedSize(data, current_alignment); 
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.message().size() + 1;
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+
+    for(size_t a = 0; a < data.children().size(); ++a)
+    {
+        current_alignment += ChildData::getCdrSerializedSize(data.children().at(a), current_alignment);}
 
 
     return current_alignment - initial_alignment;
@@ -157,106 +460,50 @@ size_t HelloWorldTwo::getCdrSerializedSize(
 void HelloWorldTwo::serialize(
         eprosima::fastcdr::Cdr& scdr) const
 {
+    DataBase::serialize(scdr); 
 
-    scdr << m_id;
-    scdr << m_type;
-    scdr << m_subtype;
+    scdr << m_index;
     scdr << m_message.c_str();
+    scdr << m_children;
 
 }
 
 void HelloWorldTwo::deserialize(
         eprosima::fastcdr::Cdr& dcdr)
 {
+    DataBase::deserialize(dcdr); 
 
-    dcdr >> m_id;
-    dcdr >> m_type;
-    dcdr >> m_subtype;
+    dcdr >> m_index;
     dcdr >> m_message;
+    dcdr >> m_children;
 }
 
 /*!
- * @brief This function sets a value in member id
- * @param _id New value for member id
+ * @brief This function sets a value in member index
+ * @param _index New value for member index
  */
-void HelloWorldTwo::id(
-        uint32_t _id)
+void HelloWorldTwo::index(
+        uint32_t _index)
 {
-    m_id = _id;
+    m_index = _index;
 }
 
 /*!
- * @brief This function returns the value of member id
- * @return Value of member id
+ * @brief This function returns the value of member index
+ * @return Value of member index
  */
-uint32_t HelloWorldTwo::id() const
+uint32_t HelloWorldTwo::index() const
 {
-    return m_id;
+    return m_index;
 }
 
 /*!
- * @brief This function returns a reference to member id
- * @return Reference to member id
+ * @brief This function returns a reference to member index
+ * @return Reference to member index
  */
-uint32_t& HelloWorldTwo::id()
+uint32_t& HelloWorldTwo::index()
 {
-    return m_id;
-}
-
-/*!
- * @brief This function sets a value in member type
- * @param _type New value for member type
- */
-void HelloWorldTwo::type(
-        uint32_t _type)
-{
-    m_type = _type;
-}
-
-/*!
- * @brief This function returns the value of member type
- * @return Value of member type
- */
-uint32_t HelloWorldTwo::type() const
-{
-    return m_type;
-}
-
-/*!
- * @brief This function returns a reference to member type
- * @return Reference to member type
- */
-uint32_t& HelloWorldTwo::type()
-{
-    return m_type;
-}
-
-/*!
- * @brief This function sets a value in member subtype
- * @param _subtype New value for member subtype
- */
-void HelloWorldTwo::subtype(
-        uint32_t _subtype)
-{
-    m_subtype = _subtype;
-}
-
-/*!
- * @brief This function returns the value of member subtype
- * @return Value of member subtype
- */
-uint32_t HelloWorldTwo::subtype() const
-{
-    return m_subtype;
-}
-
-/*!
- * @brief This function returns a reference to member subtype
- * @return Reference to member subtype
- */
-uint32_t& HelloWorldTwo::subtype()
-{
-    return m_subtype;
+    return m_index;
 }
 
 /*!
@@ -296,13 +543,50 @@ std::string& HelloWorldTwo::message()
 {
     return m_message;
 }
+/*!
+ * @brief This function copies the value in member children
+ * @param _children New value to be copied in member children
+ */
+void HelloWorldTwo::children(
+        const std::vector<ChildData>& _children)
+{
+    m_children = _children;
+}
+
+/*!
+ * @brief This function moves the value in member children
+ * @param _children New value to be moved in member children
+ */
+void HelloWorldTwo::children(
+        std::vector<ChildData>&& _children)
+{
+    m_children = std::move(_children);
+}
+
+/*!
+ * @brief This function returns a constant reference to member children
+ * @return Constant reference to member children
+ */
+const std::vector<ChildData>& HelloWorldTwo::children() const
+{
+    return m_children;
+}
+
+/*!
+ * @brief This function returns a reference to member children
+ * @return Reference to member children
+ */
+std::vector<ChildData>& HelloWorldTwo::children()
+{
+    return m_children;
+}
 
 size_t HelloWorldTwo::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t current_align = current_alignment;
 
-
+    current_align += DataBase::getKeyMaxCdrSerializedSize(current_align); 
 
 
 
@@ -313,12 +597,15 @@ size_t HelloWorldTwo::getKeyMaxCdrSerializedSize(
 
 bool HelloWorldTwo::isKeyDefined()
 {
-    return false;
+    if (DataBase::isKeyDefined())
+        return true;
+     return false;
 }
 
 void HelloWorldTwo::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-        
+    DataBase::serializeKey(scdr); 
+       
 }

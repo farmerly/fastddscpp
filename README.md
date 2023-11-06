@@ -530,3 +530,5 @@ int main(int argc, char** argv) {
     return 0;
 }
 ```
+
+fastddsgen 版本不同生成的代码文件有差异，新版生成器对数据大小有校验，需要注意
