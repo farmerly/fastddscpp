@@ -4,6 +4,7 @@
 #include <fastdds/dds/publisher/qos/PublisherQos.hpp>
 #include <fastdds/dds/subscriber/Subscriber.hpp>
 #include <fastdds/dds/subscriber/qos/SubscriberQos.hpp>
+#include <mutex>
 
 using namespace eprosima::fastdds::dds;
 
@@ -42,11 +43,22 @@ eprosima::fastdds::dds::DataReader *CDDSDomainParticipant::createDataReader(epro
 
 Topic *CDDSDomainParticipant::registerTopic(std::string topicName, std::string typeName, const TopicQos &topicQos, TypeSupport &typeSupport)
 {
+    std::lock_guard<std::mutex> guard(m_topicLock);
+    std::string                 key = topicName + "-" + typeName;
+    auto                        topicIter = m_mapTopics.find(key);
+    if (topicIter != m_mapTopics.end()) {
+        return topicIter->second;
+    }
+
     ReturnCode_t errCode = typeSupport.register_type(m_participant);
     if (errCode != ReturnCode_t::RETCODE_OK) {
         return nullptr;
     }
-    return m_participant->create_topic(topicName, typeName, topicQos);
+    Topic *topic = m_participant->create_topic(topicName, typeName, topicQos);
+    if (topic != nullptr) {
+        m_mapTopics.insert(std::pair<std::string, Topic *>(key, topic));
+    }
+    return topic;
 }
 
 bool CDDSDomainParticipant::unregisterTopic(std::string type_name)

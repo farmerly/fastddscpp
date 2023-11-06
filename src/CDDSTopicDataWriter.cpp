@@ -17,19 +17,15 @@ bool CDDSTopicDataWriter::initDataWriter(std::string                          to
                                          CDDSDomainParticipant               *participant,
                                          eprosima::fastdds::dds::TypeSupport &typeSupport)
 {
-    eprosima::fastdds::dds::TopicQos topicQos(TOPIC_QOS_DEFAULT);
-    m_topic = participant->registerTopic(topicName, typeName, topicQos, typeSupport);
-    if (m_topic == nullptr) {
+    TopicQos topicQos(TOPIC_QOS_DEFAULT);
+    Topic   *topic = participant->registerTopic(topicName, typeName, topicQos, typeSupport);
+    if (topic == nullptr) {
         return false;
     }
 
     eprosima::fastdds::dds::DataWriterQos dataWriterQos(DATAWRITER_QOS_DEFAULT);
-    m_dataWriter = participant->createDataWriter(m_topic, dataWriterQos, m_writerListener);
-    if (m_dataWriter == nullptr) {
-        delete m_topic;
-        return false;
-    }
-    return true;
+    m_dataWriter = participant->createDataWriter(topic, dataWriterQos, m_writerListener);
+    return (m_dataWriter != nullptr);
 }
 
 bool CDDSTopicDataWriter::sendData(void *data)

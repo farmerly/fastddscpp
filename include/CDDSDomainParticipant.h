@@ -6,6 +6,7 @@
 #include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
+#include <mutex>
 
 class CDDSDomainParticipant
 {
@@ -27,9 +28,11 @@ public:
     bool                                unregisterTopic(std::string typeName);
 
 private:
-    eprosima::fastdds::dds::DomainParticipant *m_participant;
-    eprosima::fastdds::dds::Subscriber        *m_subscriber;
-    eprosima::fastdds::dds::Publisher         *m_publisher;
+    eprosima::fastdds::dds::DomainParticipant             *m_participant;
+    eprosima::fastdds::dds::Subscriber                    *m_subscriber;
+    eprosima::fastdds::dds::Publisher                     *m_publisher;
+    std::map<std::string, eprosima::fastdds::dds::Topic *> m_mapTopics;
+    std::mutex                                             m_topicLock;
 };
 
 #endif

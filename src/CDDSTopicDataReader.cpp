@@ -28,19 +28,15 @@ bool CDDSTopicDataReader::initDataReader(std::string                          to
     m_readerListener.m_processCallback = processCallback;
     m_readerListener.m_processArgs = processArgs;
 
-    eprosima::fastdds::dds::TopicQos topicQos(TOPIC_QOS_DEFAULT);
-    m_topic = participant->registerTopic(topicName, typeName, topicQos, typeSupport);
-    if (m_topic == nullptr) {
+    TopicQos topicQos(TOPIC_QOS_DEFAULT);
+    Topic   *topic = participant->registerTopic(topicName, typeName, topicQos, typeSupport);
+    if (topic == nullptr) {
         return false;
     }
 
     eprosima::fastdds::dds::DataReaderQos dataReaderQos(DATAREADER_QOS_DEFAULT);
-    m_dataReader = participant->createDataReader(m_topic, dataReaderQos, m_readerListener);
-    if (m_dataReader == nullptr) {
-        delete m_topic;
-        return false;
-    }
-    return true;
+    m_dataReader = participant->createDataReader(topic, dataReaderQos, m_readerListener);
+    return (m_dataReader != nullptr);
 }
 
 void CDDSTopicDataReader::DDSDataReaderListener::on_subscription_matched(eprosima::fastdds::dds::DataReader                      *reader,

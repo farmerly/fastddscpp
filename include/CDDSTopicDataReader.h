@@ -35,5 +35,4 @@ private:
         void (*m_processCallback)(void *, IDataPacket *);
     } m_readerListener;
     eprosima::fastdds::dds::DataReader *m_dataReader;
-    eprosima::fastdds::dds::Topic      *m_topic;
 };
