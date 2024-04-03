@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CDDSDomainParticipant.h"
-#include "IDataPacket.h"
+#include "IDDSDataPacket.h"
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 
@@ -16,8 +16,8 @@ public:
                         std::string                          typeName,
                         CDDSDomainParticipant               *participant,
                         eprosima::fastdds::dds::TypeSupport &typeSupport,
-                        IDataPacket *(*createCallback)(),
-                        void (*processCallback)(void *, IDataPacket *),
+                        IDDSDataPacket *(*createCallback)(),
+                        void (*processCallback)(void *, IDDSDataPacket *),
                         void *processArgs);
 
 private:
@@ -31,8 +31,8 @@ private:
 
     public:
         void *m_processArgs;
-        IDataPacket *(*m_createCallback)();
-        void (*m_processCallback)(void *, IDataPacket *);
+        IDDSDataPacket *(*m_createCallback)();
+        void (*m_processCallback)(void *, IDDSDataPacket *);
     } m_readerListener;
     eprosima::fastdds::dds::DataReader *m_dataReader;
 };

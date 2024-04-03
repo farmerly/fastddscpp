@@ -26,9 +26,9 @@ protected:
     DataPacketCreateCB                     getDataPacketCreateCB(std::string typeName) override;
 
 private:
-    std::string         getTypeNameByTopic(std::string topicName);
-    static IDataPacket *createHelloWorldOneCB();
-    static IDataPacket *createHelloWorldTwoCB();
+    std::string            getTypeNameByTopic(std::string topicName);
+    static IDDSDataPacket *createHelloWorldOneCB();
+    static IDDSDataPacket *createHelloWorldTwoCB();
 
 private:
     CDDSParticipantManager *m_manager;

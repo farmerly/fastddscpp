@@ -1,5 +1,5 @@
 #include "CDDSHandler.h"
-#include "CDataPacket.h"
+#include "CDDSDataPacket.h"
 #include "CParticipantQosHandler.h"
 #include "DDSConstants.h"
 #include "HelloWorldOnePubSubTypes.h"
@@ -111,12 +111,12 @@ std::string CDDSDataHandler::getTypeNameByTopic(std::string topicName)
     return "";
 }
 
-IDataPacket *CDDSDataHandler::createHelloWorldOneCB()
+IDDSDataPacket *CDDSDataHandler::createHelloWorldOneCB()
 {
-    return new CDataPacket<HelloWorldOne>();
+    return new CDDSDataPacket<HelloWorldOne>();
 }
 
-IDataPacket *CDDSDataHandler::createHelloWorldTwoCB()
+IDDSDataPacket *CDDSDataHandler::createHelloWorldTwoCB()
 {
-    return new CDataPacket<HelloWorldTwo>();
+    return new CDDSDataPacket<HelloWorldTwo>();
 }

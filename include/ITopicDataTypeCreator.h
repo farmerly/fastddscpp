@@ -1,13 +1,13 @@
 #ifndef TOPIC_DATA_TYPE_CREATOR
 #define TOPIC_DATA_TYPE_CREATOR
 
-#include "IDataPacket.h"
+#include "IDDSDataPacket.h"
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/topic/TopicDataType.hpp>
 
-typedef IDataPacket *(*DataPacketCreateCB)();
-typedef void (*DataPacketProcessCB)(void *, IDataPacket *);
+typedef IDDSDataPacket *(*DataPacketCreateCB)();
+typedef void (*DataPacketProcessCB)(void *, IDDSDataPacket *);
 
 class ITopicDataTypeCreator
 {
