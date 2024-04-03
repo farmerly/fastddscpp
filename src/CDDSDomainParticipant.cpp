@@ -4,6 +4,7 @@
 #include <fastdds/dds/publisher/qos/PublisherQos.hpp>
 #include <fastdds/dds/subscriber/Subscriber.hpp>
 #include <fastdds/dds/subscriber/qos/SubscriberQos.hpp>
+#include <glog/logging.h>
 #include <mutex>
 
 using namespace eprosima::fastdds::dds;
@@ -27,46 +28,38 @@ CDDSDomainParticipant::~CDDSDomainParticipant()
     }
 }
 
-eprosima::fastdds::dds::DataWriter *CDDSDomainParticipant::createDataWriter(eprosima::fastdds::dds::Topic              *topic,
-                                                                            eprosima::fastdds::dds::DataWriterQos       dataWriterQos,
-                                                                            eprosima::fastdds::dds::DataWriterListener &listener)
-{
-    return m_publisher->create_datawriter(topic, dataWriterQos, &listener);
-}
-
-eprosima::fastdds::dds::DataReader *CDDSDomainParticipant::createDataReader(eprosima::fastdds::dds::Topic              *topic,
-                                                                            eprosima::fastdds::dds::DataReaderQos       dataReaderQos,
-                                                                            eprosima::fastdds::dds::DataReaderListener &listener)
-{
-    return m_subscriber->create_datareader(topic, dataReaderQos, &listener);
-}
-
-Topic *CDDSDomainParticipant::registerTopic(std::string topicName, std::string typeName, const TopicQos &topicQos, TypeSupport &typeSupport)
+Topic *CDDSDomainParticipant::registerTopic(std::string topicName, const TopicQos &topicQos, TypeSupport &typeSupport)
 {
     std::lock_guard<std::mutex> guard(m_topicLock);
-    std::string                 key = topicName + "-" + typeName;
-    auto                        topicIter = m_mapTopics.find(key);
-    if (topicIter != m_mapTopics.end()) {
-        return topicIter->second;
-    }
+    if (m_mapTopics.find(topicName) != m_mapTopics.end())
+        return m_mapTopics.at(topicName);
 
     ReturnCode_t errCode = typeSupport.register_type(m_participant);
-    if (errCode != ReturnCode_t::RETCODE_OK) {
+    if (errCode != ReturnCode_t::RETCODE_OK)
         return nullptr;
-    }
-    Topic *topic = m_participant->create_topic(topicName, typeName, topicQos);
+
+    Topic *topic = m_participant->create_topic(topicName, typeSupport->getName(), topicQos);
     if (topic != nullptr) {
-        m_mapTopics.insert(std::pair<std::string, Topic *>(key, topic));
+        m_mapTopics.insert(std::pair<std::string, Topic *>(topicName, topic));
     }
     return topic;
 }
 
-bool CDDSDomainParticipant::unregisterTopic(std::string type_name)
+bool CDDSDomainParticipant::unregisterTopic(std::string topicName)
 {
-    ReturnCode_t errCode = m_participant->unregister_type(type_name);
-    if (errCode != ReturnCode_t::RETCODE_OK) {
-        std::cerr << "unregister_type " << type_name << " error, errcode: " << errCode() << std::endl;
-        return false;
+    std::lock_guard<std::mutex> guard(m_topicLock);
+    if (m_mapTopics.find(topicName) == m_mapTopics.end())
+        return true;
+
+    auto topic = m_mapTopics.at(topicName);
+    if (topic) {
+        ReturnCode_t errCode = m_participant->delete_topic(topic);
+        if (errCode != ReturnCode_t::RETCODE_OK) {
+            LOG(ERROR) << "unregister_type " << topicName << " error, errcode: " << errCode();
+            return false;
+        }
+        delete topic;
     }
+    m_mapTopics.erase(topicName);
     return true;
 }
