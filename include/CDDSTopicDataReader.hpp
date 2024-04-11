@@ -57,9 +57,9 @@ bool CDDSTopicDataReader<T>::initDataReader(eprosima::fastdds::dds::Subscriber  
     if (!subscriber || !topic)
         return false;
 
-    m_readerListener.m_processCallback = callback;
+    m_readerListener.m_callback = callback;
     if (!m_dataReader)
-        m_dataReader = subscriber->create_datareader(topic, dataReaderQos, m_readerListener);
+        m_dataReader = subscriber->create_datareader(topic, dataReaderQos, &m_readerListener);
     return (m_dataReader != nullptr);
 }
 

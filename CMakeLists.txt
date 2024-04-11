@@ -25,4 +25,4 @@ find_package(fastrtps REQUIRED)
 
 # add_subdirectory(example)
 add_subdirectory(src)
-# add_subdirectory(test)
+add_subdirectory(test)

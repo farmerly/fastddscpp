@@ -10,7 +10,7 @@ public:
     ~CParticipantQosHandler();
 
 public:
-    eprosima::fastdds::dds::DomainParticipantQos &getDomainParticipantQos();
+    eprosima::fastdds::dds::DomainParticipantQos &getQos();
 
 public:
     void addSHMTransport(uint32_t segment_size);

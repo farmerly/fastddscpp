@@ -31,7 +31,7 @@ CParticipantQosHandler::~CParticipantQosHandler()
 {
 }
 
-DomainParticipantQos &CParticipantQosHandler::getDomainParticipantQos()
+DomainParticipantQos &CParticipantQosHandler::getQos()
 {
     return m_participantQos;
 }

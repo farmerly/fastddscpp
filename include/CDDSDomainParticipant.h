@@ -21,15 +21,18 @@ public:
 
 public:
     template <typename T>
-    eprosima::fastdds::dds::DataWriter *createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos);
+    CDDSTopicDataWriter<T> *createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos);
+
     template <typename T>
-    eprosima::fastdds::dds::DataReader *createDataReader(std::string                                  topicName,
-                                                         const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
-                                                         std::function<void(T)>                       callback);
-    eprosima::fastdds::dds::Topic      *registerTopic(std::string                             topicName,
-                                                      const eprosima::fastdds::dds::TopicQos &topicQos,
-                                                      eprosima::fastdds::dds::TypeSupport    &typeSupport);
-    bool                                unregisterTopic(std::string topicName);
+    CDDSTopicDataReader<T> *createDataReader(std::string                                  topicName,
+                                             const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
+                                             std::function<void(std::shared_ptr<T>)>      callback);
+
+    eprosima::fastdds::dds::Topic *registerTopic(std::string                             topicName,
+                                                 const eprosima::fastdds::dds::TopicQos &topicQos,
+                                                 eprosima::fastdds::dds::TypeSupport    &typeSupport);
+
+    bool unregisterTopic(std::string topicName);
 
 private:
     eprosima::fastdds::dds::DomainParticipant                       *m_participant;
@@ -40,30 +43,28 @@ private:
 };
 
 template <typename T>
-eprosima::fastdds::dds::DataWriter *CDDSDomainParticipant::createDataWriter(std::string                           topicName,
-                                                                            eprosima::fastdds::dds::DataWriterQos dataWriterQos)
+CDDSTopicDataWriter<T> *CDDSDomainParticipant::createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos)
 {
     std::lock_guard<std::mutex> guard(m_topicLock);
     if (m_mapTopics.find(topicName) == m_mapTopics.end())
         return nullptr;
 
-    CDDSTopicDataWriter<T> dataWriter = new CDDSTopicDataWriter<T>();
-    dataWriter.initDataWriter(m_publisher, m_mapTopics.at(topicName), dataWriterQos);
+    CDDSTopicDataWriter<T> *dataWriter = new CDDSTopicDataWriter<T>();
+    dataWriter->initDataWriter(m_publisher, m_mapTopics.at(topicName), dataWriterQos);
     return dataWriter;
 }
 
 template <typename T>
-eprosima::fastdds::dds::DataReader *CDDSDomainParticipant::createDataReader(std::string                                  topicName,
-                                                                            const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
-                                                                            std::function<void(T)>                       callback)
+CDDSTopicDataReader<T> *CDDSDomainParticipant::createDataReader(std::string                                  topicName,
+                                                                const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
+                                                                std::function<void(std::shared_ptr<T>)>      callback)
 {
     std::lock_guard<std::mutex> guard(m_topicLock);
     if (m_mapTopics.find(topicName) == m_mapTopics.end())
         return nullptr;
 
-    CDDSTopicDataReader<T> dataReader = new CDDSTopicDataReader<T>();
-
-    dataReader.initDataReader(m_subscriber, m_mapTopics.at(topicName), dataReaderQos, callback);
+    CDDSTopicDataReader<T> *dataReader = new CDDSTopicDataReader<T>();
+    dataReader->initDataReader(m_subscriber, m_mapTopics.at(topicName), dataReaderQos, callback);
     return dataReader;
 }
 

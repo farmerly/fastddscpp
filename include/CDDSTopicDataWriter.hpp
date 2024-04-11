@@ -38,7 +38,7 @@ bool CDDSTopicDataWriter<T>::initDataWriter(eprosima::fastdds::dds::Publisher   
         return false;
 
     if (!m_dataWriter)
-        m_dataWriter = publisher->create_datawriter(topic, dataWriterQos, m_writerListener);
+        m_dataWriter = publisher->create_datawriter(topic, dataWriterQos, &m_writerListener);
     return (m_dataWriter != nullptr);
 }
 
