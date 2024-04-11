@@ -9,7 +9,7 @@
 template <typename T>
 class CDDSTopicDataReader
 {
-    using ProcessCallback = std::function<void(std::shared_ptr<T>)>;
+    typedef std::function<void(std::shared_ptr<T>)> ProcessCallback;
 
 public:
     CDDSTopicDataReader();
