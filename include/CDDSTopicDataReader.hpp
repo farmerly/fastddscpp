@@ -9,7 +9,7 @@
 template <typename T>
 class CDDSTopicDataReader
 {
-    typedef std::function<void(std::shared_ptr<T>)> ProcessCallback;
+    typedef std::function<void(std::shared_ptr<T>)> OnMessageCallback;
 
 public:
     CDDSTopicDataReader();
@@ -18,8 +18,8 @@ public:
 public:
     bool initDataReader(eprosima::fastdds::dds::Subscriber          *subscriber,
                         eprosima::fastdds::dds::Topic               *topic,
-                        const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
-                        ProcessCallback                              callback);
+                        OnMessageCallback                            callback,
+                        const eprosima::fastdds::dds::DataReaderQos &dataReaderQos);
 
 private:
     class DDSDataReaderListener : public eprosima::fastdds::dds::DataReaderListener
@@ -31,7 +31,7 @@ private:
         void on_liveliness_changed(eprosima::fastdds::dds::DataReader *reader, const eprosima::fastrtps::LivelinessChangedStatus &status);
 
     public:
-        ProcessCallback m_callback;
+        OnMessageCallback m_callback;
     } m_readerListener;
     eprosima::fastdds::dds::DataReader *m_dataReader;
 };
@@ -51,8 +51,8 @@ CDDSTopicDataReader<T>::~CDDSTopicDataReader()
 template <typename T>
 bool CDDSTopicDataReader<T>::initDataReader(eprosima::fastdds::dds::Subscriber          *subscriber,
                                             eprosima::fastdds::dds::Topic               *topic,
-                                            const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
-                                            ProcessCallback                              callback)
+                                            OnMessageCallback                            callback,
+                                            const eprosima::fastdds::dds::DataReaderQos &dataReaderQos)
 {
     if (!subscriber || !topic)
         return false;

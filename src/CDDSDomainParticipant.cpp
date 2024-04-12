@@ -7,6 +7,7 @@
 #include <glog/logging.h>
 #include <mutex>
 
+using namespace std;
 using namespace eprosima::fastdds::dds;
 
 CDDSDomainParticipant::CDDSDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos)
@@ -28,8 +29,11 @@ CDDSDomainParticipant::~CDDSDomainParticipant()
     }
 }
 
-Topic *CDDSDomainParticipant::registerTopic(std::string topicName, const TopicQos &topicQos, TypeSupport &typeSupport)
+Topic *CDDSDomainParticipant::registerTopic(std::string                            topicName,
+                                            eprosima::fastdds::dds::TopicDataType *dataType,
+                                            const TopicQos                        &topicQos)
 {
+    TypeSupport                 typeSupport(dataType);
     std::lock_guard<std::mutex> guard(m_topicLock);
     if (m_mapTopics.find(topicName) != m_mapTopics.end())
         return m_mapTopics.at(topicName);

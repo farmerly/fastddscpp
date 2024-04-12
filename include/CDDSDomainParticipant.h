@@ -10,6 +10,7 @@
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 
+#include <fastdds/dds/topic/TopicDataType.hpp>
 #include <mutex>
 #include <unordered_map>
 
@@ -25,12 +26,13 @@ public:
 
     template <typename T>
     CDDSTopicDataReader<T> *createDataReader(std::string                                  topicName,
-                                             const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
-                                             std::function<void(std::shared_ptr<T>)>      callback);
+                                             std::function<void(std::shared_ptr<T>)>      callback,
+                                             const eprosima::fastdds::dds::DataReaderQos &dataReaderQos);
 
-    eprosima::fastdds::dds::Topic *registerTopic(std::string                             topicName,
-                                                 const eprosima::fastdds::dds::TopicQos &topicQos,
-                                                 eprosima::fastdds::dds::TypeSupport    &typeSupport);
+    eprosima::fastdds::dds::Topic *registerTopic(
+        std::string                             topicName,
+        eprosima::fastdds::dds::TopicDataType  *dataType,
+        const eprosima::fastdds::dds::TopicQos &topicQos = eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
 
     bool unregisterTopic(std::string topicName);
 
@@ -56,15 +58,15 @@ CDDSTopicDataWriter<T> *CDDSDomainParticipant::createDataWriter(std::string topi
 
 template <typename T>
 CDDSTopicDataReader<T> *CDDSDomainParticipant::createDataReader(std::string                                  topicName,
-                                                                const eprosima::fastdds::dds::DataReaderQos &dataReaderQos,
-                                                                std::function<void(std::shared_ptr<T>)>      callback)
+                                                                std::function<void(std::shared_ptr<T>)>      callback,
+                                                                const eprosima::fastdds::dds::DataReaderQos &dataReaderQos)
 {
     std::lock_guard<std::mutex> guard(m_topicLock);
     if (m_mapTopics.find(topicName) == m_mapTopics.end())
         return nullptr;
 
     CDDSTopicDataReader<T> *dataReader = new CDDSTopicDataReader<T>();
-    dataReader->initDataReader(m_subscriber, m_mapTopics.at(topicName), dataReaderQos, callback);
+    dataReader->initDataReader(m_subscriber, m_mapTopics.at(topicName), callback, dataReaderQos);
     return dataReader;
 }
 
