@@ -1,19 +1,20 @@
 #include "CDDSHandler.h"
-#include "CDDSDomainParticipant.h"
-#include "CDDSTopicDataReader.hpp"
-#include "CDDSTopicDataWriter.hpp"
-#include "CParticipantQosHandler.h"
 #include "DDSConstants.h"
+#include "DDSDomainParticipant.h"
+#include "DDSTopicDataReader.hpp"
+#include "DDSTopicDataWriter.hpp"
 #include "HelloWorldOne.h"
 #include "HelloWorldOnePubSubTypes.h"
 #include "HelloWorldTwo.h"
 #include "HelloWorldTwoPubSubTypes.h"
+#include "ParticipantQosHandler.h"
 #include <chrono>
 #include <fastdds/dds/publisher/DataWriter.hpp>
 #include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/topic/qos/TopicQos.hpp>
 #include <glog/logging.h>
+#include <iostream>
 #include <thread>
 
 using namespace eprosima::fastdds::dds;
@@ -27,14 +28,14 @@ void processHelloWorldOne(std::shared_ptr<HelloWorldOne> data)
 
 void run_dds_data_writer()
 {
-    CParticipantQosHandler participantQosManager("test_writer");
+    ParticipantQosHandler participantQosManager("test_writer");
     participantQosManager.addSHMTransport(153600);
-    CDDSDomainParticipant participant(170, participantQosManager.getQos());
+    DDSDomainParticipant participant(170, participantQosManager.getQos());
 
     eprosima::fastdds::dds::TopicQos topicQos(TOPIC_QOS_DEFAULT);
     participant.registerTopic(DDS_TOPIC_HELLO_WORLD_ONE, new HelloWorldOnePubSubType(), topicQos);
     eprosima::fastdds::dds::DataWriterQos dataWriterQos(DATAWRITER_QOS_DEFAULT);
-    CDDSTopicDataWriter<HelloWorldOne> *dataWriter = participant.createDataWriter<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE, dataWriterQos);
+    DDSTopicDataWriter<HelloWorldOne> *dataWriter = participant.createDataWriter<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE, dataWriterQos);
 
     int index = 0;
     while (true) {
@@ -44,23 +45,25 @@ void run_dds_data_writer()
         if (dataWriter->writeMessage(message)) {
             std::cout << "send message: " << message.index() << std::endl;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
 void run_dds_data_reader()
 {
-    CParticipantQosHandler participantQosManager("test_reader");
+    ParticipantQosHandler participantQosManager("test_reader");
     participantQosManager.addSHMTransport(153600);
-    CDDSDomainParticipant participant(170, participantQosManager.getQos());
+    DDSDomainParticipant participant(170, participantQosManager.getQos());
 
     eprosima::fastdds::dds::TopicQos topicQos(TOPIC_QOS_DEFAULT);
     participant.registerTopic(DDS_TOPIC_HELLO_WORLD_ONE, new HelloWorldOnePubSubType(), topicQos);
+    participant.registerTopic(DDS_TOPIC_HELLO_WORLD_TWO, new HelloWorldTwoPubSubType(), topicQos);
     eprosima::fastdds::dds::DataReaderQos dataReaderQos(DATAREADER_QOS_DEFAULT);
-    CDDSTopicDataReader<HelloWorldOne>   *dataReader =
+    DDSTopicDataReader<HelloWorldOne>    *dataReader =
         participant.createDataReader<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE, processHelloWorldOne, dataReaderQos);
 
-    while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    while (std::cin.get() != '\n') {
     }
+
+    // delete dataReader;
 }

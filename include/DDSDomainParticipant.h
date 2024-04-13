@@ -1,8 +1,8 @@
 #ifndef DDS_DOMAIN_PARTICIPANT_H_H_H
 #define DDS_DOMAIN_PARTICIPANT_H_H_H
 
-#include "CDDSTopicDataReader.hpp"
-#include "CDDSTopicDataWriter.hpp"
+#include "DDSTopicDataReader.hpp"
+#include "DDSTopicDataWriter.hpp"
 
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
@@ -14,20 +14,20 @@
 #include <mutex>
 #include <unordered_map>
 
-class CDDSDomainParticipant
+class DDSDomainParticipant
 {
 public:
-    CDDSDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos);
-    virtual ~CDDSDomainParticipant();
+    DDSDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos);
+    virtual ~DDSDomainParticipant();
 
 public:
     template <typename T>
-    CDDSTopicDataWriter<T> *createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos);
+    DDSTopicDataWriter<T> *createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos);
 
     template <typename T>
-    CDDSTopicDataReader<T> *createDataReader(std::string                                  topicName,
-                                             std::function<void(std::shared_ptr<T>)>      callback,
-                                             const eprosima::fastdds::dds::DataReaderQos &dataReaderQos);
+    DDSTopicDataReader<T> *createDataReader(std::string                                  topicName,
+                                            std::function<void(std::shared_ptr<T>)>      callback,
+                                            const eprosima::fastdds::dds::DataReaderQos &dataReaderQos);
 
     eprosima::fastdds::dds::Topic *registerTopic(
         std::string                             topicName,
@@ -45,29 +45,25 @@ private:
 };
 
 template <typename T>
-CDDSTopicDataWriter<T> *CDDSDomainParticipant::createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos)
+DDSTopicDataWriter<T> *DDSDomainParticipant::createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos)
 {
     std::lock_guard<std::mutex> guard(m_topicLock);
     if (m_mapTopics.find(topicName) == m_mapTopics.end())
         return nullptr;
 
-    CDDSTopicDataWriter<T> *dataWriter = new CDDSTopicDataWriter<T>();
-    dataWriter->initDataWriter(m_publisher, m_mapTopics.at(topicName), dataWriterQos);
-    return dataWriter;
+    return new DDSTopicDataWriter<T>(m_publisher, m_mapTopics.at(topicName), dataWriterQos);
 }
 
 template <typename T>
-CDDSTopicDataReader<T> *CDDSDomainParticipant::createDataReader(std::string                                  topicName,
-                                                                std::function<void(std::shared_ptr<T>)>      callback,
-                                                                const eprosima::fastdds::dds::DataReaderQos &dataReaderQos)
+DDSTopicDataReader<T> *DDSDomainParticipant::createDataReader(std::string                                  topicName,
+                                                              std::function<void(std::shared_ptr<T>)>      callback,
+                                                              const eprosima::fastdds::dds::DataReaderQos &dataReaderQos)
 {
     std::lock_guard<std::mutex> guard(m_topicLock);
     if (m_mapTopics.find(topicName) == m_mapTopics.end())
         return nullptr;
 
-    CDDSTopicDataReader<T> *dataReader = new CDDSTopicDataReader<T>();
-    dataReader->initDataReader(m_subscriber, m_mapTopics.at(topicName), callback, dataReaderQos);
-    return dataReader;
+    return new DDSTopicDataReader<T>(m_subscriber, m_mapTopics.at(topicName), callback, dataReaderQos);
 }
 
 #endif

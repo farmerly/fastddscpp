@@ -12,7 +12,7 @@ class DDSDataReaderListener : public eprosima::fastdds::dds::DataReaderListener
 protected:
     void on_subscription_matched(eprosima::fastdds::dds::DataReader *reader, const eprosima::fastdds::dds::SubscriptionMatchedStatus &info)
     {
-        LOG(INFO) << "on_subscription_matched: " << info.current_count_change;
+        LOG(INFO) << "on_subscription_matched: " << info.current_count;
     }
 
     void on_liveliness_changed(eprosima::fastdds::dds::DataReader *reader, const eprosima::fastrtps::LivelinessChangedStatus &status)

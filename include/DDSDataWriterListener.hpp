@@ -9,13 +9,13 @@ class DDSDataWriterListener : public eprosima::fastdds::dds::DataWriterListener
 protected:
     void on_publication_matched(eprosima::fastdds::dds::DataWriter *writer, const eprosima::fastdds::dds::PublicationMatchedStatus &info)
     {
-        LOG(INFO) << "on_publication_matched: " << info.total_count;
+        LOG(INFO) << "on_publication_matched: " << info.current_count;
     }
 
     void on_offered_deadline_missed(eprosima::fastdds::dds::DataWriter                        *writer,
                                     const eprosima::fastdds::dds::OfferedDeadlineMissedStatus &status)
     {
-        LOG(INFO) << "on_publication_matched: " << status.total_count;
+        LOG(INFO) << "on_offered_deadline_missed: " << status.total_count;
     }
 
     void on_liveliness_lost(eprosima::fastdds::dds::DataWriter *writer, const eprosima::fastdds::dds::LivelinessLostStatus &status)

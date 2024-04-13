@@ -1,4 +1,0 @@
-#ifndef DDS_TOPIC_DATA_WRITER_H_H_H
-#define DDS_TOPIC_DATA_WRITER_H_H_H
-
-#endif

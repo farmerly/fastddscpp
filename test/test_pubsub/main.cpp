@@ -16,8 +16,10 @@ int main(int argc, char *argv[])
 
     if (strcmp(argv[1], "sub") == 0) {
         run_dds_data_reader();
-    } else {
+    } else if (strcmp(argv[1], "pub") == 0) {
         run_dds_data_writer();
+    } else {
+        std::cerr << "unknown command: " << argv[1] << std::endl;
     }
 
     return 0;

@@ -3,11 +3,11 @@
 
 #include <fastdds/dds/domain/qos/DomainParticipantQos.hpp>
 
-class CParticipantQosHandler
+class ParticipantQosHandler
 {
 public:
-    CParticipantQosHandler(std::string participant_name);
-    ~CParticipantQosHandler();
+    ParticipantQosHandler(std::string participant_name);
+    ~ParticipantQosHandler();
 
 public:
     eprosima::fastdds::dds::DomainParticipantQos &getQos();
