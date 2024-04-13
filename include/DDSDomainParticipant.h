@@ -5,9 +5,7 @@
 #include "DDSTopicDataWriter.hpp"
 
 #include <fastdds/dds/domain/DomainParticipant.hpp>
-#include <fastdds/dds/publisher/DataWriterListener.hpp>
 #include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
-#include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 
 #include <fastdds/dds/topic/TopicDataType.hpp>
@@ -22,17 +20,18 @@ public:
 
 public:
     template <typename T>
-    DDSTopicDataWriter<T> *createDataWriter(std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos);
+    DDSTopicDataWriter<T> *createDataWriter(
+        std::string topicName, eprosima::fastdds::dds::DataWriterQos dataWriterQos = eprosima::fastdds::dds::DATAWRITER_QOS_DEFAULT);
 
     template <typename T>
-    DDSTopicDataReader<T> *createDataReader(std::string                                  topicName,
-                                            std::function<void(std::shared_ptr<T>)>      callback,
-                                            const eprosima::fastdds::dds::DataReaderQos &dataReaderQos);
+    DDSTopicDataReader<T> *createDataReader(
+        std::string                                  topicName,
+        std::function<void(std::shared_ptr<T>)>      callback,
+        const eprosima::fastdds::dds::DataReaderQos &dataReaderQos = eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT);
 
-    eprosima::fastdds::dds::Topic *registerTopic(
-        std::string                             topicName,
-        eprosima::fastdds::dds::TopicDataType  *dataType,
-        const eprosima::fastdds::dds::TopicQos &topicQos = eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
+    bool registerTopic(std::string                             topicName,
+                       eprosima::fastdds::dds::TopicDataType  *dataType,
+                       const eprosima::fastdds::dds::TopicQos &topicQos = eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
 
     bool unregisterTopic(std::string topicName);
 

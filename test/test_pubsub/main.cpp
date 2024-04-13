@@ -2,10 +2,14 @@
 #include <iostream>
 #include <memory>
 
-#include "CDDSHandler.h"
 #include "DDSConstants.h"
+#include "DDSTestHandler.h"
+#include "HelloWorldOne.h"
 
 using namespace std;
+
+void run_dds_data_writer();
+void run_dds_data_reader();
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +25,41 @@ int main(int argc, char *argv[])
     } else {
         std::cerr << "unknown command: " << argv[1] << std::endl;
     }
-
     return 0;
+}
+
+void processHelloWorldOne(std::shared_ptr<HelloWorldOne> data)
+{
+    std::cout << "recv message: " << data->index() << std::endl;
+}
+
+void run_dds_data_writer()
+{
+    DDSTestHandler handler(170, "test_writer");
+    handler.initDomainParticipant();
+    DDSTopicDataWriter<HelloWorldOne> *dataWriter = handler.createDataWriter<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE);
+
+    int index = 0;
+    while (true) {
+        HelloWorldOne message;
+        message.index(++index);
+        message.points(std::vector<uint8_t>(100));
+        if (dataWriter->writeMessage(message)) {
+            std::cout << "send message: " << message.index() << std::endl;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+}
+
+void run_dds_data_reader()
+{
+    DDSTestHandler handler(170, "test_reader");
+    handler.initDomainParticipant();
+    DDSTopicDataReader<HelloWorldOne> *dataReader =
+        handler.createDataReader<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE, processHelloWorldOne);
+
+    while (std::cin.get() != '\n') {
+    }
+
+    delete dataReader;
 }

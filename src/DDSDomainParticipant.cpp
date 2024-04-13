@@ -7,7 +7,6 @@
 #include <glog/logging.h>
 #include <mutex>
 
-using namespace std;
 using namespace eprosima::fastdds::dds;
 
 DDSDomainParticipant::DDSDomainParticipant(int domainId, const eprosima::fastdds::dds::DomainParticipantQos &participantQos)
@@ -29,23 +28,26 @@ DDSDomainParticipant::~DDSDomainParticipant()
     }
 }
 
-Topic *DDSDomainParticipant::registerTopic(std::string topicName, eprosima::fastdds::dds::TopicDataType *dataType, const TopicQos &topicQos)
+bool DDSDomainParticipant::registerTopic(std::string topicName, eprosima::fastdds::dds::TopicDataType *dataType, const TopicQos &topicQos)
 {
+    if (!dataType)
+        return false;
+
     TypeSupport                 typeSupport(dataType);
     std::lock_guard<std::mutex> guard(m_topicLock);
     if (m_mapTopics.find(topicName) != m_mapTopics.end())
-        return m_mapTopics.at(topicName);
+        return true;
 
     ReturnCode_t errCode = typeSupport.register_type(m_participant);
     if (errCode != ReturnCode_t::RETCODE_OK) {
         LOG(ERROR) << "register_type failed";
-        return nullptr;
+        return false;
     }
 
     Topic *topic = m_participant->create_topic(topicName, typeSupport->getName(), topicQos);
     if (topic != nullptr)
         m_mapTopics.insert(std::pair<std::string, Topic *>(topicName, topic));
-    return topic;
+    return true;
 }
 
 bool DDSDomainParticipant::unregisterTopic(std::string topicName)

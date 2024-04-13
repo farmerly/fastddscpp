@@ -2,6 +2,8 @@
 
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
+#include <fastdds/dds/subscriber/Subscriber.hpp>
+#include <fastdds/dds/topic/TopicDescription.hpp>
 #include <glog/logging.h>
 
 template <typename T>
@@ -12,7 +14,13 @@ class DDSDataReaderListener : public eprosima::fastdds::dds::DataReaderListener
 protected:
     void on_subscription_matched(eprosima::fastdds::dds::DataReader *reader, const eprosima::fastdds::dds::SubscriptionMatchedStatus &info)
     {
-        LOG(INFO) << "on_subscription_matched: " << info.current_count;
+        const eprosima::fastdds::dds::TopicDescription *topic = reader->get_topicdescription();
+
+        if (info.current_count_change == 1) {
+            LOG(INFO) << "subscription " << topic->get_name() << " matched";
+        } else if (info.current_count_change == -1) {
+            LOG(INFO) << "subscription " << topic->get_name() << " unmatched";
+        }
     }
 
     void on_liveliness_changed(eprosima::fastdds::dds::DataReader *reader, const eprosima::fastrtps::LivelinessChangedStatus &status)

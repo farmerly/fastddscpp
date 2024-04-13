@@ -69,12 +69,12 @@ void ParticipantQosHandler::addTCPV6Transport()
 {
 }
 
-void ParticipantQosHandler::addUDPV4Transport(const std::vector<std::string> &ipaddrs)
+void ParticipantQosHandler::addUDPV4Transport(uint32_t buffer_size, const std::vector<std::string> &ipaddrs)
 {
     auto udp_transport = std::make_shared<UDPv4TransportDescriptor>();
 
-    udp_transport->sendBufferSize = 1024 * 1024 * 16;
-    udp_transport->receiveBufferSize = 1024 * 1024 * 16;
+    udp_transport->sendBufferSize = buffer_size;
+    udp_transport->receiveBufferSize = buffer_size;
     // 是否使用对 send_to() 的非阻塞调用
     udp_transport->non_blocking_send = true;
     for (int i = 0; i < ipaddrs.size(); i++) {
@@ -85,10 +85,10 @@ void ParticipantQosHandler::addUDPV4Transport(const std::vector<std::string> &ip
     m_participantQos.transport().user_transports.push_back(udp_transport);
 }
 
-void ParticipantQosHandler::addUDPV6Transport()
+void ParticipantQosHandler::addUDPV6Transport(uint32_t buffer_size)
 {
     auto udp_transport = std::make_shared<UDPv6TransportDescriptor>();
-    udp_transport->sendBufferSize = 1024 * 1024 * 16;
-    udp_transport->receiveBufferSize = 1024 * 1024 * 16;
+    udp_transport->sendBufferSize = buffer_size;
+    udp_transport->receiveBufferSize = buffer_size;
     m_participantQos.transport().user_transports.push_back(udp_transport);
 }
