@@ -1,4 +1,9 @@
-add_subdirectory(ddsidls)
-add_subdirectory(handler)
-add_subdirectory(test_pub)
-add_subdirectory(test_sub)
+project(test_pubsub)
+
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+aux_source_directory(. SRC_FILES)
+add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+target_link_libraries(${PROJECT_NAME} glog)
+target_link_libraries(${PROJECT_NAME} fastddscpp)

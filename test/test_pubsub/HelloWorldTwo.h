@@ -93,7 +93,7 @@ public:
      * @param x Reference to the object DataBase that will be copied.
      */
     eProsima_user_DllExport DataBase(
-            DataBase&& x);
+            DataBase&& x) noexcept;
 
     /*!
      * @brief Copy assignment.
@@ -107,7 +107,7 @@ public:
      * @param x Reference to the object DataBase that will be copied.
      */
     eProsima_user_DllExport DataBase& operator =(
-            DataBase&& x);
+            DataBase&& x) noexcept;
 
     /*!
      * @brief Comparison operator.
@@ -144,11 +144,11 @@ public:
 
 
     /*!
-     * @brief This function returns the maximum serialized size of an object
-     * depending on the buffer alignment.
-     * @param current_alignment Buffer alignment.
-     * @return Maximum serialized size.
-     */
+    * @brief This function returns the maximum serialized size of an object
+    * depending on the buffer alignment.
+    * @param current_alignment Buffer alignment.
+    * @return Maximum serialized size.
+    */
     eProsima_user_DllExport static size_t getMaxCdrSerializedSize(
             size_t current_alignment = 0);
 
@@ -203,6 +203,7 @@ public:
 private:
 
     int32_t m_baseId;
+
 };
 /*!
  * @brief This class represents the structure ChildData defined by the user in the IDL file.
@@ -234,7 +235,7 @@ public:
      * @param x Reference to the object ChildData that will be copied.
      */
     eProsima_user_DllExport ChildData(
-            ChildData&& x);
+            ChildData&& x) noexcept;
 
     /*!
      * @brief Copy assignment.
@@ -248,7 +249,7 @@ public:
      * @param x Reference to the object ChildData that will be copied.
      */
     eProsima_user_DllExport ChildData& operator =(
-            ChildData&& x);
+            ChildData&& x) noexcept;
 
     /*!
      * @brief Comparison operator.
@@ -285,11 +286,11 @@ public:
 
 
     /*!
-     * @brief This function returns the maximum serialized size of an object
-     * depending on the buffer alignment.
-     * @param current_alignment Buffer alignment.
-     * @return Maximum serialized size.
-     */
+    * @brief This function returns the maximum serialized size of an object
+    * depending on the buffer alignment.
+    * @param current_alignment Buffer alignment.
+    * @return Maximum serialized size.
+    */
     eProsima_user_DllExport static size_t getMaxCdrSerializedSize(
             size_t current_alignment = 0);
 
@@ -344,6 +345,7 @@ public:
 private:
 
     int32_t m_childId;
+
 };
 /*!
  * @brief This class represents the structure HelloWorldTwo defined by the user in the IDL file.
@@ -375,7 +377,7 @@ public:
      * @param x Reference to the object HelloWorldTwo that will be copied.
      */
     eProsima_user_DllExport HelloWorldTwo(
-            HelloWorldTwo&& x);
+            HelloWorldTwo&& x) noexcept;
 
     /*!
      * @brief Copy assignment.
@@ -389,7 +391,7 @@ public:
      * @param x Reference to the object HelloWorldTwo that will be copied.
      */
     eProsima_user_DllExport HelloWorldTwo& operator =(
-            HelloWorldTwo&& x);
+            HelloWorldTwo&& x) noexcept;
 
     /*!
      * @brief Comparison operator.
@@ -476,11 +478,11 @@ public:
     eProsima_user_DllExport std::vector<ChildData>& children();
 
     /*!
-     * @brief This function returns the maximum serialized size of an object
-     * depending on the buffer alignment.
-     * @param current_alignment Buffer alignment.
-     * @return Maximum serialized size.
-     */
+    * @brief This function returns the maximum serialized size of an object
+    * depending on the buffer alignment.
+    * @param current_alignment Buffer alignment.
+    * @return Maximum serialized size.
+    */
     eProsima_user_DllExport static size_t getMaxCdrSerializedSize(
             size_t current_alignment = 0);
 
@@ -537,6 +539,7 @@ private:
     uint32_t m_index;
     std::string m_message;
     std::vector<ChildData> m_children;
+
 };
 
 #endif // _FAST_DDS_GENERATED_HELLOWORLDTWO_H_

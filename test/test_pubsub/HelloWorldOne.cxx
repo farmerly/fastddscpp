@@ -34,11 +34,14 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
+#define HelloWorldOne_max_cdr_typesize 10000008ULL;
+#define HelloWorldOne_max_key_cdr_typesize 0ULL;
+
 HelloWorldOne::HelloWorldOne()
 {
-    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@23faf8f2
+    // unsigned long m_index
     m_index = 0;
-    // m_points com.eprosima.idl.parser.typecode.SequenceTypeCode@4e7dc304
+    // sequence<octet, 10000000> m_points
 
 
 }
@@ -57,7 +60,7 @@ HelloWorldOne::HelloWorldOne(
 }
 
 HelloWorldOne::HelloWorldOne(
-        HelloWorldOne&& x)
+        HelloWorldOne&& x) noexcept 
 {
     m_index = x.m_index;
     m_points = std::move(x.m_points);
@@ -74,7 +77,7 @@ HelloWorldOne& HelloWorldOne::operator =(
 }
 
 HelloWorldOne& HelloWorldOne::operator =(
-        HelloWorldOne&& x)
+        HelloWorldOne&& x) noexcept
 {
 
     m_index = x.m_index;
@@ -99,20 +102,8 @@ bool HelloWorldOne::operator !=(
 size_t HelloWorldOne::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t initial_alignment = current_alignment;
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
-    current_alignment += (10000000 * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
-
-
-
-
-    return current_alignment - initial_alignment;
+    static_cast<void>(current_alignment);
+    return HelloWorldOne_max_cdr_typesize;
 }
 
 size_t HelloWorldOne::getCdrSerializedSize(
@@ -222,16 +213,12 @@ std::vector<uint8_t>& HelloWorldOne::points()
     return m_points;
 }
 
+
 size_t HelloWorldOne::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t current_align = current_alignment;
-
-
-
-
-
-    return current_align;
+    static_cast<void>(current_alignment);
+    return HelloWorldOne_max_key_cdr_typesize;
 }
 
 bool HelloWorldOne::isKeyDefined()
@@ -243,5 +230,4 @@ void HelloWorldOne::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-      
 }
