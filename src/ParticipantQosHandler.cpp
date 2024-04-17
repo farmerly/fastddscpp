@@ -90,5 +90,6 @@ void ParticipantQosHandler::addUDPV6Transport(uint32_t buffer_size)
     auto udp_transport = std::make_shared<UDPv6TransportDescriptor>();
     udp_transport->sendBufferSize = buffer_size;
     udp_transport->receiveBufferSize = buffer_size;
+    udp_transport->non_blocking_send = true;
     m_participantQos.transport().user_transports.push_back(udp_transport);
 }

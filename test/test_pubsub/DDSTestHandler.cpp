@@ -19,8 +19,7 @@ using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastdds::rtps;
 using namespace eprosima::fastrtps::rtps;
 
-DDSTestHandler::DDSTestHandler(int domainId, std::string participantName) :
-    DDSParticipantManager(domainId), m_participantName(participantName)
+DDSTestHandler::DDSTestHandler(int domainId) : DDSParticipantManager(domainId)
 {
     addTopicDataTypeCreator(DDS_TOPIC_HELLO_WORLD_ONE, []() {
         return new HelloWorldOnePubSubType();
@@ -34,9 +33,9 @@ DDSTestHandler::~DDSTestHandler()
 {
 }
 
-ParticipantQosHandler DDSTestHandler::createParticipantQos()
+ParticipantQosHandler DDSTestHandler::createParticipantQos(std::string participantName)
 {
-    ParticipantQosHandler participantQos(m_participantName);
+    ParticipantQosHandler participantQos(participantName);
     participantQos.addUDPV4Transport(1024 * 1024 * 16);
     return participantQos;
 }

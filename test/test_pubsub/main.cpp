@@ -35,8 +35,8 @@ void processHelloWorldOne(std::shared_ptr<HelloWorldOne> data)
 
 void run_dds_data_writer()
 {
-    DDSTestHandler handler(170, "test_writer");
-    handler.initDomainParticipant();
+    DDSTestHandler handler(170);
+    handler.initDomainParticipant("test_writer");
     DDSTopicDataWriter<HelloWorldOne> *dataWriter = handler.createDataWriter<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE);
 
     int index = 0;
@@ -53,8 +53,8 @@ void run_dds_data_writer()
 
 void run_dds_data_reader()
 {
-    DDSTestHandler handler(170, "test_reader");
-    handler.initDomainParticipant();
+    DDSTestHandler handler(170);
+    handler.initDomainParticipant("test_reader");
     DDSTopicDataReader<HelloWorldOne> *dataReader =
         handler.createDataReader<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE, processHelloWorldOne);
 

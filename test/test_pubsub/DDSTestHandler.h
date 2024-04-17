@@ -7,12 +7,9 @@
 class DDSTestHandler : public DDSParticipantManager
 {
 public:
-    DDSTestHandler(int domainId, std::string participantName);
+    DDSTestHandler(int domainId);
     ~DDSTestHandler();
 
 protected:
-    ParticipantQosHandler createParticipantQos() override;
-
-private:
-    std::string m_participantName;
+    ParticipantQosHandler createParticipantQos(std::string participantName) override;
 };
