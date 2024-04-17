@@ -18,10 +18,10 @@ public:
 protected:
     eprosima::fastdds::dds::TopicDataType *getTopicDataType(std::string topicName);
     void                                   addTopicDataTypeCreator(std::string topicName, TopicDataTypeCreator creator);
-    virtual ParticipantQosHandler          createParticipantQos() = 0;
+    virtual ParticipantQosHandler          createParticipantQos(std::string participantName) = 0;
 
 public:
-    bool initDomainParticipant();
+    bool initDomainParticipant(std::string participantName);
 
     template <typename T>
     DDSTopicDataWriter<T> *createDataWriter(std::string topicName);

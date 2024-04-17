@@ -11,10 +11,12 @@ DDSParticipantManager::~DDSParticipantManager()
 {
 }
 
-bool DDSParticipantManager::initDomainParticipant()
+bool DDSParticipantManager::initDomainParticipant(std::string participantName)
 {
-    eprosima::fastdds::dds::DomainParticipantQos participantQos = createParticipantQos().getQos();
-    m_participant = std::make_shared<DDSDomainParticipant>(m_domainId, participantQos);
+    if (!m_participant) {
+        eprosima::fastdds::dds::DomainParticipantQos participantQos = createParticipantQos(participantName).getQos();
+        m_participant = std::make_shared<DDSDomainParticipant>(m_domainId, participantQos);
+    }
     return true;
 }
 
@@ -24,7 +26,6 @@ eprosima::fastdds::dds::TopicDataType *DDSParticipantManager::getTopicDataType(s
         LOG(ERROR) << "Cann't found topic: " << topicName;
         return nullptr;
     }
-
     return m_topicTypes.at(topicName)();
 }
 
