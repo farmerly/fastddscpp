@@ -39,15 +39,23 @@ void run_dds_data_writer()
     handler.initDomainParticipant("test_writer");
     DDSTopicDataWriter<HelloWorldOne> *dataWriter = handler.createDataWriter<HelloWorldOne>(DDS_TOPIC_HELLO_WORLD_ONE);
 
-    int index = 0;
-    while (true) {
+    bool runFlag = true;
+    int  index = 0;
+
+    std::thread([&]() {
+        while (std::cin.get() != '\n') {
+        }
+        runFlag = false;
+    }).detach();
+
+    while (runFlag) {
         HelloWorldOne message;
         message.index(++index);
         message.points(std::vector<uint8_t>(100));
         if (dataWriter->writeMessage(message)) {
             std::cout << "send message: " << message.index() << std::endl;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
@@ -60,6 +68,4 @@ void run_dds_data_reader()
 
     while (std::cin.get() != '\n') {
     }
-
-    delete dataReader;
 }
